@@ -1,15 +1,20 @@
 package networking.networking_messages;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
-public class Frame {
-	static final int MIN_SIZE = 64;
-	public static Frame decode(ArrayList<Byte> msg) {
-		if(msg.size() < 64)
-			throw new Exception("Frame size is too small.");
-		//TODO:
-		return new Frame();
-	}
+import networking.networking_messages.decoders.FrameDecoder;
+import networking.other.MAC;
+
+/**
+ *
+ * @param header
+ * @param payload
+ * @param trailer
+ */
+public class Frame implements ByteSerializable<Frame>{
+	public static final int MIN_SIZE = 64;
+	
 	
 	private FrameHeader header;
 	private FramePayload payload;
@@ -21,11 +26,24 @@ public class Frame {
 		this.setTrailer(trailer);
 	}
 	
+	/**
+	 * @return concatenated encodings of header, payload, trailer
+	 * Pads the payload with 0s until the frame reaches a min size of 64 bytes
+	  */
 	public ArrayList<Byte> encode() {
 		ArrayList<Byte> res = new ArrayList();
-		
+		var hEnc = header.encode();
+		var pEnc = payload.encode();
+		var tEnc = trailer.encode();
+		int frameLen = hEnc.size() + pEnc.size() + tEnc.size();
+		if(frameLen < Frame.MIN_SIZE)
+			payload.padPayload(pEnc, Frame.MIN_SIZE - frameLen);
+		res.addAll(hEnc);
+		res.addAll(pEnc);
+		res.addAll(tEnc);
 		return res;
 	}
+	
 	
 	public FrameHeader getHeader() {
 		return header;
@@ -48,5 +66,21 @@ public class Frame {
 
 	public void setTrailer(FrameTrailer trailer) {
 		this.trailer = trailer;
+	}
+	
+	public boolean equals(Frame other) {
+		return header.equals(other.getHeader()) && payload.equals(other.getPayload()) && trailer.equals(other.getTrailer());
+	}
+	
+	public static void main(String[] args) throws Exception {
+		var fDec = new FrameDecoder();
+		FrameHeader h = new FrameHeader(new MAC("0000.0000.0000"), new MAC("1111.1111.1111"));
+		FramePayload p = new FramePayload();
+		FrameTrailer t = new FrameTrailer(new ArrayList<Byte>(Arrays.asList((byte)0,(byte)0,(byte)0, (byte)0)));
+		Frame f = new Frame(h, p, t);
+		Frame f2 = fDec.decode(f.encode());
+		if(!f.equals(f2))
+			throw new Exception("Failed frame decoding ");
+		System.out.println("All good");
 	}
 }

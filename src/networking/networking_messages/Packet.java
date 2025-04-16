@@ -1,5 +1,7 @@
 package networking.networking_messages;
 
+import java.util.List;
+
 public class Packet extends FramePayload {
 	private PacketHeader header;
 	private PacketPayload payload;
@@ -14,5 +16,10 @@ public class Packet extends FramePayload {
 	}
 	public void setPayload(PacketPayload payload) {
 		this.payload = payload;
+	}
+	
+	public static FramePayload decode(List<Byte> bytes) {
+		System.out.println("child called");
+		return new FramePayload();
 	}
 }

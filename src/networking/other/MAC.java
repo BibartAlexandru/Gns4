@@ -1,15 +1,18 @@
 package networking.other;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+
+import networking.networking_messages.ByteSerializable;
 
 /**
  * Address can be of the format 0000.0000.0000 or 00:00:00:00:00:00
  * Will convert all letters to uppercase
  */
-public class MAC {
+public class MAC implements ByteSerializable<MAC> {
 	
 	private String address;
 
@@ -64,18 +67,22 @@ public class MAC {
 		setAddress(address);
 	}
 	
-	public static MAC decode(ArrayList<Byte> bytes) throws Exception{
+	public boolean equals(MAC other) {
+		return this.address.equals(other.getAddress());
+	}
+	
+	public static MAC decode(List<Byte> bytes) throws Exception{
 		if(bytes.size() != 14)
 			throw new Exception(bytes + "has invalid number of bytes: " + bytes.size());
 		String address = bytes.stream()
 				.map(b -> Character.toString((char)(int)b))
 				.collect(Collectors.joining());
-		System.out.println(address);
+//		System.out.println(address);
 		return new MAC(address);
 	}
 	
 	public static void main(String[] args) throws Exception {
 		MAC m1 = new MAC("0412.0Ab0.0d30");
-		System.out.println(MAC.decode(m1.encode()));
+		System.out.println(MAC.decode(m1.encode()).getAddress());
 	}
 }
