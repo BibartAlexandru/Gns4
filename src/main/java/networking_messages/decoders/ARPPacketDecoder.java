@@ -1,9 +1,9 @@
-package networking.networking_messages.decoders;
+package main.java.networking_messages.decoders;
 
 import java.util.List;
 
-import networking.networking_messages.ARPPacket;
-import networking.networking_messages.ByteArrayDecoder;
+import main.java.networking_messages.ARPPacket;
+
 
 public class ARPPacketDecoder extends ByteArrayDecoder<ARPPacket> {
 

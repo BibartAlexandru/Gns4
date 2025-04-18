@@ -1,4 +1,4 @@
-package networking.other;
+package main.java.other;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.regex.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
-import networking.networking_messages.ByteSerializable;
+import main.java.helper.ByteSerializable;
 
 
 public class MAC implements ByteSerializable<MAC> {

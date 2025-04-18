@@ -1,9 +1,9 @@
-package networking.networking_messages.decoders;
+package main.java.networking_messages.decoders;
 
 import java.util.List;
 
-import networking.networking_messages.ByteArrayDecoder;
-import networking.networking_messages.DHCPPacket;
+import main.java.networking_messages.DHCPPacket;
+
 
 public class DHCPPacketDecoder extends ByteArrayDecoder<DHCPPacket>{
 

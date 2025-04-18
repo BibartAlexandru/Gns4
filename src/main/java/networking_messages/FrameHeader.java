@@ -1,10 +1,12 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import networking.networking_messages.decoders.FrameHeaderDecoder;
-import networking.other.MAC;
+import main.java.helper.ByteSerializable;
+import main.java.networking_messages.decoders.FrameHeaderDecoder;
+import main.java.other.MAC;
+
 
 
 /**

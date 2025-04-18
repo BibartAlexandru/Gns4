@@ -1,11 +1,11 @@
-package networking.networking_messages.decoders;
+package main.java.networking_messages.decoders;
 
 import java.util.List;
 
-import networking.networking_messages.ARPResponse;
-import networking.networking_messages.ByteArrayDecoder;
-import networking.other.IPv4NetworkAddress;
-import networking.other.MACDecoder;
+import main.java.networking_messages.ARPResponse;
+import main.java.other.IPv4NetworkAddress;
+import main.java.other.MACDecoder;
+
 
 public class ARPResponseDecoder extends ARPPacketDecoder{
 

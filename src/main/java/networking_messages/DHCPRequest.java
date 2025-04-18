@@ -1,10 +1,11 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 
-import java.net.InetAddress;
 import java.util.ArrayList;
 
-import networking.networking_messages.decoders.DHCPRequestDecoder;
-import networking.other.IPv4NetworkAddress;
+import main.java.networking_messages.decoders.DHCPRequestDecoder;
+import main.java.other.IPv4NetworkAddress;
+
+
 
 public class DHCPRequest extends DHCPPacket {
 	public static final int DHCPREQUEST_CODE = 2;

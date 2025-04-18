@@ -1,4 +1,4 @@
-package networking.networking_messages;
+package main.java.networking_messages.decoders;
 
 import java.util.List;
 

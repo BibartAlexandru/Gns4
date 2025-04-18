@@ -1,12 +1,8 @@
-package networking.networking_messages.test.java;
+package main.java.networking_messages.test.java;
 
-import static org.junit.Assert.*;
-
-import org.junit.Test;
-
-import networking.networking_messages.ARPRequest;
-import networking.networking_messages.decoders.ARPRequestDecoder;
-import networking.other.IPv4NetworkAddress;
+import main.java.networking_messages.ARPRequest;
+import main.java.networking_messages.decoders.ARPRequestDecoder;
+import main.java.other.IPv4NetworkAddress;
 
 public class ARPRequestTest {
 	@Test

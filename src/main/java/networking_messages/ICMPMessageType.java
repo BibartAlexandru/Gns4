@@ -1,6 +1,6 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 
 public enum ICMPMessageType {
-	ECHO=0,
-	REPLY=1,
+	ECHO,
+	REPLY,
 }

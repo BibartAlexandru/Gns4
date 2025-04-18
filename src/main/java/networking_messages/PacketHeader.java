@@ -1,8 +1,11 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 import java.util.ArrayList;
 
-import networking.networking_messages.decoders.PacketHeaderDecoder;
-import networking.other.IPv4NetworkAddress;
+import main.java.helper.ByteSerializable;
+import main.java.networking_messages.decoders.PacketHeaderDecoder;
+import main.java.other.IPv4NetworkAddress;
+
+
 
 /**
  * 9 bytes

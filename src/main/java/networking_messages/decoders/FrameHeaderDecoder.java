@@ -1,11 +1,11 @@
-package networking.networking_messages.decoders;
+package main.java.networking_messages.decoders;
 
 import java.util.List;
 
-import networking.networking_messages.ByteArrayDecoder;
-import networking.networking_messages.FrameHeader;
-import networking.other.MAC;
-import networking.other.MACDecoder;
+import main.java.networking_messages.FrameHeader;
+import main.java.other.MAC;
+import main.java.other.MACDecoder;
+
 
 public class FrameHeaderDecoder extends ByteArrayDecoder<FrameHeader> {
 	public FrameHeader decode(List<Byte> bytes) throws Exception {

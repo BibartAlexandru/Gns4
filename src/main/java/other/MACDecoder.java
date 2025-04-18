@@ -1,8 +1,8 @@
-package networking.other;
+package main.java.other;
 
 import java.util.List;
 
-import networking.networking_messages.ByteArrayDecoder;
+import main.java.networking_messages.decoders.ByteArrayDecoder;
 
 public class MACDecoder extends ByteArrayDecoder<MAC>{
 

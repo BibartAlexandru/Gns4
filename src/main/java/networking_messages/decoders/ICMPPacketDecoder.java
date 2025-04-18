@@ -1,12 +1,12 @@
-package networking.networking_messages.decoders;
+package main.java.networking_messages.decoders;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-import networking.networking_messages.ByteArrayDecoder;
-import networking.networking_messages.ICMPMessageType;
-import networking.networking_messages.ICMPPacket;
-import networking.networking_messages.PacketPayload;
+import main.java.networking_messages.ICMPMessageType;
+import main.java.networking_messages.ICMPPacket;
+import main.java.networking_messages.PacketPayload;
+
 
 public class ICMPPacketDecoder extends PacketPayloadDecoder {
 

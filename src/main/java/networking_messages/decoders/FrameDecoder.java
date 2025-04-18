@@ -1,13 +1,10 @@
-package networking.networking_messages.decoders;
+package main.java.networking_messages.decoders;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import networking.networking_messages.ByteArrayDecoder;
-import networking.networking_messages.Frame;
-import networking.networking_messages.FrameHeader;
-import networking.networking_messages.FramePayload;
-import networking.networking_messages.FrameTrailer;
+import main.java.networking_messages.Frame;
+
 
 public class FrameDecoder extends ByteArrayDecoder<Frame>{
 

@@ -1,10 +1,10 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 
 import java.util.ArrayList;
 
-import networking.networking_messages.decoders.ARPResponseDecoder;
-import networking.other.IPv4NetworkAddress;
-import networking.other.MAC;
+import main.java.networking_messages.decoders.ARPResponseDecoder;
+import main.java.other.IPv4NetworkAddress;
+import main.java.other.MAC;
 
 public class ARPResponse extends ARPPacket{
 	static public final byte ARPRESPONSE_CODE = 1;

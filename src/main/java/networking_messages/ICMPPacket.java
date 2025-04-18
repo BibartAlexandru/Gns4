@@ -1,9 +1,10 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 
-import networking.networking_messages.decoders.ICMPPacketDecoder;
+import main.java.networking_messages.decoders.ICMPPacketDecoder;
+
 
 public class ICMPPacket extends PacketPayload{
 	public static final int MIN_SIZE = 5;

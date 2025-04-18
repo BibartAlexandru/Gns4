@@ -1,5 +1,5 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 
-public class DHCPPacket extends PacketPayload{
+public abstract class DHCPPacket extends PacketPayload{
 	
 }

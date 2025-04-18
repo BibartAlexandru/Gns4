@@ -1,11 +1,11 @@
-package networking.networking_messages.decoders;
+package main.java.networking_messages.decoders;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import networking.networking_messages.ByteArrayDecoder;
-import networking.networking_messages.DHCPOffer;
-import networking.other.IPv4NetworkAddress;
+import main.java.networking_messages.DHCPOffer;
+import main.java.other.IPv4NetworkAddress;
+
 
 public class DHCPOfferDecoder extends DHCPPacketDecoder{
 

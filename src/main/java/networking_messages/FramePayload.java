@@ -1,7 +1,9 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import main.java.helper.ByteSerializable;
 
 public class FramePayload implements ByteSerializable<FramePayload>{
 

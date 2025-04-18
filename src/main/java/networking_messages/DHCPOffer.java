@@ -1,9 +1,10 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 
 import java.util.ArrayList;
 
-import networking.networking_messages.decoders.DHCPOfferDecoder;
-import networking.other.IPv4NetworkAddress;
+import main.java.networking_messages.decoders.DHCPOfferDecoder;
+import main.java.other.IPv4NetworkAddress;
+
 
 public class DHCPOffer extends DHCPPacket{
 	public static final byte OFFER_CODE = 1;

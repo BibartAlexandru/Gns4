@@ -1,17 +1,18 @@
-package agents;
+package main.java.agents;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import jade.core.Agent;
-import networking.networking_messages.ARPPacket;
-import networking.networking_messages.DHCPPacket;
-import networking.networking_messages.Frame;
-import networking.networking_messages.ICMPPacket;
-import networking.networking_messages.Packet;
-import networking.other.Interface;
-import networking.other.MAC;
+import main.java.networking_messages.ARPPacket;
+import main.java.networking_messages.DHCPPacket;
+import main.java.networking_messages.Frame;
+import main.java.networking_messages.ICMPPacket;
+import main.java.networking_messages.Packet;
+import main.java.other.Interface;
+import main.java.other.MAC;
+
 
 public class DeviceAgent extends Agent {
 	 private ArrayList<Interface> interfaces;

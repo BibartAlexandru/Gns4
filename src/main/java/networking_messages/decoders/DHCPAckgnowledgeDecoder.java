@@ -1,9 +1,10 @@
-package networking.networking_messages.decoders;
+package main.java.networking_messages.decoders;
 
 import java.util.List;
 
-import networking.networking_messages.ByteArrayDecoder;
-import networking.networking_messages.DHCPAckgnowledge;
+import main.java.networking_messages.DHCPAckgnowledge;
+
+
 
 public class DHCPAckgnowledgeDecoder extends DHCPPacketDecoder {
 

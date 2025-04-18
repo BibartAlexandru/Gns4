@@ -1,4 +1,4 @@
-package networking.networking_messages;
+package main.java.helper;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,5 @@
-package networking.networking_messages.test.java;
+package main.java.networking_messages.test.java;
 
-import org.junit.Test;
 
 public class ARPPacketTest {
 	@Test

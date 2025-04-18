@@ -1,10 +1,13 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import networking.networking_messages.decoders.PacketDecoder;
-import networking.other.IPv4NetworkAddress;
+import jade.imtp.leap.JICP.JICPPacket;
+import main.java.networking_messages.decoders.PacketDecoder;
+import main.java.other.IPv4NetworkAddress;
+
+
 
 public class Packet extends FramePayload {
 	private PacketHeader header;
@@ -43,7 +46,7 @@ public class Packet extends FramePayload {
 				new IPv4NetworkAddress(new byte[] {1,2,3,4}, new byte[]{0,0,0,0}),
 				new IPv4NetworkAddress(new byte[] {1,2,3,4}, new byte[]{0,0,0,0}),
 				3);
-		var pl = new PacketPayload();
+		var pl = new DHCPDiscover();
 		var p1 = new Packet(h,pl);
 		var dec = new PacketDecoder();
 		var p2 = dec.decode(p1.encode());

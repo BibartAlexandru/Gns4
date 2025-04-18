@@ -1,10 +1,10 @@
-package networking.networking_messages;
+package main.java.networking_messages;
 
 import java.net.InetAddress;
 import java.util.ArrayList;
 
-import networking.networking_messages.decoders.ARPRequestDecoder;
-import networking.other.IPv4NetworkAddress;
+import main.java.networking_messages.decoders.ARPRequestDecoder;
+import main.java.other.IPv4NetworkAddress;
 
 public class ARPRequest extends ARPPacket {
 	static public final byte ARPREQUEST_CODE = 0;

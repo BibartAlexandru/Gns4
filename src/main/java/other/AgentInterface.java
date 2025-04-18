@@ -1,4 +1,4 @@
-package networking.other;
+package main.java.other;
 
 import FIPA.AgentID;
 import jade.core.AID;
