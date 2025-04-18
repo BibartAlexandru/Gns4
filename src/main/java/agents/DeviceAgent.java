@@ -19,10 +19,10 @@ import main.java.other.MAC;
 
 
 public class DeviceAgent extends Agent {
-	 private ArrayList<Interface> interfaces;
+	 protected ArrayList<Interface> interfaces;
 	 // destIp -> int name
-	 private HashMap<InetAddress, String> routingTable;
-	 private HashMap<InetAddress, MAC> arpTable;
+	 protected HashMap<InetAddress, String> routingTable;
+	 protected HashMap<InetAddress, MAC> arpTable;
 	 
 	 /**
 	  * 
@@ -44,11 +44,25 @@ public class DeviceAgent extends Agent {
 		 var frameDec = new FrameDecoder();
 		 try {
 			 var frame = frameDec.decode(Helper.toByteArrList(msg));
-			 
 		 }
 		 catch(Exception e) {
 			 System.out.println("Agent: " + getLocalName() + " failed to parse frame: " + msg);
 		 }
+	 }
+	 
+	 protected void setup() {
+		 
+		 onLoaded();
+	 }
+	 
+	 protected void onLoaded() {
+		 
+	 }
+	 
+	 protected void onInterfaceDisconnect(Interface interf) {
+		 interf.setConnectedTo(null);
+		 interf.setIpv4(null);
+		 interf.setStatusLogical(false);
 	 }
 	 
 	public ArrayList<Interface> getInterfaces() {
