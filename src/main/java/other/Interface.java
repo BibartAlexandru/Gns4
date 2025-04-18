@@ -2,9 +2,9 @@ package main.java.other;
 
 import java.net.InetAddress;
 
-import agents.DeviceAgent;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
+import main.java.agents.DeviceAgent;
 
 public class Interface {
 	private boolean statusPhysical;
@@ -112,8 +112,9 @@ public class Interface {
 	/**
 	 * Makes the agent send an ACL Inform message with the byte array.
 	 * Should not be used directly. Call the sendSomething functions in the DeviceAgent instead.
+	 * @throws Exception 
 	 */
-	private void send(byte[] msg) {
+	private void send(byte[] msg) throws Exception {
 		if(connectedTo == null)
 			throw new Exception("Attempting to send frame on Interface " +  name  +  "which is not connected to anything.");
 		ACLMessage agentMsg = new ACLMessage(ACLMessage.INFORM);

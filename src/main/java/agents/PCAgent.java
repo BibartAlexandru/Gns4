@@ -1,5 +1,9 @@
 package main.java.agents;
 
-public class PCAgent {
+public class PCAgent extends DeviceAgent {
+
+	public PCAgent() {
+		super();
+	}
 
 }

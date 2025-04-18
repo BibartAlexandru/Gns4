@@ -36,7 +36,7 @@ public class DHCPAckgnowledge extends DHCPPacket{
 		return res;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		var ack1 = new DHCPAckgnowledge(IPv4NetworkAddress.IP_BROADCAST);
 		var enc = ack1.encode();
 		var ackDec = new DHCPAckgnowledgeDecoder();

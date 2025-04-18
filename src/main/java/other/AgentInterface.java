@@ -12,5 +12,11 @@ public class AgentInterface {
 	public void setInterfaceName(String interfaceName) {
 		this.interfaceName = interfaceName;
 	}
+	public AID getAgentID() {
+		return agentID;
+	}
+	public void setAgentID(AID agentID) {
+		this.agentID = agentID;
+	}
 	
 }

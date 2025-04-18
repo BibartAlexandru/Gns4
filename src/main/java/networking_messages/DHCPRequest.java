@@ -39,7 +39,7 @@ public class DHCPRequest extends DHCPPacket {
 		return res;
 	}
 	
-	public static void main(String[] args) {
+	public static void main(String[] args) throws Exception {
 		var req1 = new DHCPRequest(IPv4NetworkAddress.IP_BROADCAST);
 		var enc = req1.encode();
 		var dec = new DHCPRequestDecoder();

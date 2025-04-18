@@ -2,8 +2,9 @@ package main.java.other;
 
 import java.util.ArrayList;
 
-import networking.networking_messages.ByteSerializable;
-import networking.networking_messages.decoders.IPv4NetworkAddressDecoder;
+import main.java.helper.ByteSerializable;
+import main.java.networking_messages.decoders.IPv4NetworkAddressDecoder;
+
 
 public class IPv4NetworkAddress implements ByteSerializable<IPv4NetworkAddress>{
 	public static final IPv4NetworkAddress ZERO = new IPv4NetworkAddress(
@@ -59,7 +60,7 @@ public class IPv4NetworkAddress implements ByteSerializable<IPv4NetworkAddress>{
 	
 	public static void main(String[] args) throws Exception {
 		IPv4NetworkAddress i1 = new IPv4NetworkAddress(new byte[] {0,(byte) 255,0,0}, new byte[] {0,(byte) 255,0,0});
-		IPv4NetworkAddressDecoder dec = new IPv4NetworkAddressDecoder();
+		var dec = new IPv4NetworkAddressDecoder();
 		IPv4NetworkAddress i2 = dec.decode(i1.encode());
 		if(!i1.equals(i2))
 			throw new Exception("FAILED");

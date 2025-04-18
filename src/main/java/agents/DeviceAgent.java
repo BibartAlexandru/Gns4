@@ -56,4 +56,8 @@ public class DeviceAgent extends Agent {
 	public void setArpTable(HashMap<InetAddress, MAC> arpTable) {
 		this.arpTable = arpTable;
 	}
+	
+	public DeviceAgent() {
+		super();
+	}
 }
