@@ -1,0 +1,16 @@
+package networking.other;
+
+import FIPA.AgentID;
+import jade.core.AID;
+
+public class AgentInterface {
+	private String interfaceName;
+	private AID agentID;
+	public String getInterfaceName() {
+		return interfaceName;
+	}
+	public void setInterfaceName(String interfaceName) {
+		this.interfaceName = interfaceName;
+	}
+	
+}

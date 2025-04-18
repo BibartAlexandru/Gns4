@@ -1,3 +1,4 @@
 # din /src/
 javac -cp ~/eclipse-workspace/jade/jade.jar examples/party/*.java
 java -cp ~/eclipse-workspace/jade/jade.jar:. jade.Boot -gui -agents "Host:examples.party.HostAgent;"
+

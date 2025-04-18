@@ -1,9 +1,0 @@
-/**
- * 
- */
-/**
- * 
- */
-module FinalISMLProject {
-	requires jade;
-}
