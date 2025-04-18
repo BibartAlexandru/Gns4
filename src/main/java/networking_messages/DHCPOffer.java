@@ -8,7 +8,7 @@ import main.java.other.IPv4NetworkAddress;
 
 public class DHCPOffer extends DHCPPacket{
 	public static final byte OFFER_CODE = 1;
-	public static final int MIN_SIZE = 5;
+	public static final int MIN_SIZE = 1 + 1 + 4;
 	
 	private ArrayList<IPv4NetworkAddress> offeredIps;
 
@@ -27,6 +27,8 @@ public class DHCPOffer extends DHCPPacket{
 	@Override
 	public ArrayList<Byte> encode() {
 		var res = new ArrayList<Byte>();
+		
+		res.add((byte)Layer3PayloadTypes.DHCP.ordinal());
 		res.add(OFFER_CODE);
 		byte[] offeredIpsLen = new byte[] {
 			(byte)(offeredIps.size() >> 24),
@@ -48,15 +50,5 @@ public class DHCPOffer extends DHCPPacket{
 
 	public boolean equals(DHCPOffer other) {
 		return offeredIps.equals(other.getOfferedIps());
-	}
-	
-	public static void main(String[] args) throws Exception {
-		ArrayList<IPv4NetworkAddress> offers = new ArrayList<>();
-		offers.add(IPv4NetworkAddress.ZERO);
-		var o1 = new DHCPOffer(offers);
-		var enc = o1.encode();
-		var dec = new DHCPOfferDecoder();
-		var o2 = dec.decode(enc);
-		assert o1.equals(o2);
 	}
 }

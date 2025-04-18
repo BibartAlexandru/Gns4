@@ -8,7 +8,7 @@ import main.java.other.IPv4NetworkAddress;
 
 public class ARPRequest extends ARPPacket {
 	static public final byte ARPREQUEST_CODE = 0;
-	static public final int NR_BYTES = 9;
+	static public final int NR_BYTES = 1 + 1 + IPv4NetworkAddress.NR_BYTES;
 	private IPv4NetworkAddress requestedIp;
 	
 	public ARPRequest(IPv4NetworkAddress requestedIp) {
@@ -26,6 +26,7 @@ public class ARPRequest extends ARPPacket {
 	@Override
 	public ArrayList<Byte> encode() {
 		var res = new ArrayList<Byte>();
+		res.add((byte) Layer2PayloadTypes.ARP.ordinal());
 		res.add(ARPREQUEST_CODE);
 		res.addAll(requestedIp.encode());
 		return res;

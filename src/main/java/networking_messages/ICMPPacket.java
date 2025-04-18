@@ -6,8 +6,8 @@ import java.util.ArrayList;
 import main.java.networking_messages.decoders.ICMPPacketDecoder;
 
 
-public class ICMPPacket extends PacketPayload{
-	public static final int MIN_SIZE = 5;
+public class ICMPPacket extends Layer3Payload{
+	public static final int MIN_SIZE = 1 + 1 + 4;
 	public ICMPPacket(ICMPMessageType type, String content) {
 		super();
 		this.type = type;
@@ -34,7 +34,7 @@ public class ICMPPacket extends PacketPayload{
 	 */
 	@Override
 	public ArrayList<Byte> encode() {
-		byte _type = (byte)type.ordinal();
+		byte ICMPType = (byte)type.ordinal();
 		byte[] contentLength = new byte[] {
 			(byte) (content.length() >> 24),
 			(byte) (content.length() >> 16),
@@ -42,7 +42,9 @@ public class ICMPPacket extends PacketPayload{
 			(byte) content.length()
  		};
 		var res = new ArrayList<Byte>();
-		res.add(_type);
+		
+		res.add((byte)Layer3PayloadTypes.ICMP.ordinal());
+		res.add(ICMPType);
 		for(byte b : contentLength)
 			res.add(b);
 		for(byte b : content.getBytes(StandardCharsets.US_ASCII))

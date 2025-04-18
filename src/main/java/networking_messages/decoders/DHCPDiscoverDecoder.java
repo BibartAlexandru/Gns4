@@ -10,7 +10,7 @@ public class DHCPDiscoverDecoder extends DHCPPacketDecoder{
 
 	@Override
 	public DHCPDiscover decode(List<Byte> bytes) throws Exception {
-		if(bytes.size() != 1 && bytes.get(0) != (byte)0)
+		if(bytes.size() != DHCPDiscover.NR_BYTES && bytes.get(0) != (byte)0 )
 			throw new Exception("Failed to parse DHCPDiscover " + bytes);
 		return new DHCPDiscover();
 	}

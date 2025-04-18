@@ -9,11 +9,11 @@ import main.java.other.MACDecoder;
 
 public class FrameHeaderDecoder extends ByteArrayDecoder<FrameHeader> {
 	public FrameHeader decode(List<Byte> bytes) throws Exception {
-		if(bytes.size() != 28)
+		if(bytes.size() != FrameHeader.NR_BYTES)
 			throw new Exception(bytes + " has invalid size of " + bytes.size());
 		var macDec = new MACDecoder();
-		MAC dstMac = macDec.decode(bytes.subList(0, 14));
-		MAC srcMac = macDec.decode(bytes.subList(14, 28));
+		MAC dstMac = macDec.decode(bytes.subList(0, MAC.NR_BYTES));
+		MAC srcMac = macDec.decode(bytes.subList(MAC.NR_BYTES, 2*MAC.NR_BYTES));
 		return new FrameHeader(dstMac, srcMac);
 	}
 }

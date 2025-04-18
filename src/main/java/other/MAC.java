@@ -82,7 +82,10 @@ public class MAC implements ByteSerializable<MAC> {
 	}
 	
 	public boolean equals(MAC other) {
-		return this.address.equals(other.getAddress());
+		for(int i = 0 ; i < 6 ; i++)
+			if(address[i] != other.getAddress()[i])
+				return false;
+		return true;
 	}
 	
 	public static void main(String[] args) throws Exception {

@@ -5,6 +5,7 @@ import java.util.Arrays;
 
 import main.java.helper.ByteSerializable;
 import main.java.networking_messages.decoders.FrameDecoder;
+import main.java.other.IPv4NetworkAddress;
 import main.java.other.MAC;
 
 
@@ -19,10 +20,10 @@ public class Frame implements ByteSerializable<Frame>{
 	
 	
 	private FrameHeader header;
-	private FramePayload payload;
+	private Layer2Payload payload;
 	private FrameTrailer trailer;
 	
-	public Frame(FrameHeader header, FramePayload payload, FrameTrailer trailer) {
+	public Frame(FrameHeader header, Layer2Payload payload, FrameTrailer trailer) {
 		this.setHeader(header);
 		this.setPayload(payload);
 		this.setTrailer(trailer);
@@ -54,11 +55,11 @@ public class Frame implements ByteSerializable<Frame>{
 		this.header = header;
 	}
 
-	public FramePayload getPayload() {
+	public Layer2Payload getPayload() {
 		return payload;
 	}
 
-	public void setPayload(FramePayload payload) {
+	public void setPayload(Layer2Payload payload) {
 		this.payload = payload;
 	}
 
@@ -77,7 +78,7 @@ public class Frame implements ByteSerializable<Frame>{
 	public static void main(String[] args) throws Exception {
 		var fDec = new FrameDecoder();
 		FrameHeader h = new FrameHeader(new MAC("0000.0000.0000"), new MAC("1111.1111.1111"));
-		FramePayload p = new FramePayload();
+		Layer2Payload p = new ARPRequest(IPv4NetworkAddress.IP_BROADCAST);
 		FrameTrailer t = new FrameTrailer(new ArrayList<Byte>(Arrays.asList((byte)0,(byte)0,(byte)0, (byte)0)));
 		Frame f = new Frame(h, p, t);
 		Frame f2 = fDec.decode(f.encode());

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.networking_messages.Frame;
+import main.java.networking_messages.FrameHeader;
+import main.java.networking_messages.FrameTrailer;
 
 
 public class FrameDecoder extends ByteArrayDecoder<Frame>{
@@ -17,9 +19,9 @@ public class FrameDecoder extends ByteArrayDecoder<Frame>{
 		var pDec = new FramePayloadDecoder();
 		var tDec = new FrameTrailerDecoder();
 		
-		var header = hDec.decode(bytes.subList(0, 28));
-		var payload = pDec.decode(bytes.subList(28, bytes.size()-4));
-		var trailer = tDec.decode(bytes.subList(bytes.size()-4, bytes.size()));
+		var header = hDec.decode(bytes.subList(0, FrameHeader.NR_BYTES));
+		var payload = pDec.decode(bytes.subList(FrameHeader.NR_BYTES, bytes.size()-FrameTrailer.NR_BYTES));
+		var trailer = tDec.decode(bytes.subList(bytes.size()-FrameTrailer.NR_BYTES, bytes.size()));
 		return new Frame(header, payload, trailer);
 	}
 	

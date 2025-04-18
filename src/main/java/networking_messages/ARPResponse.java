@@ -37,6 +37,7 @@ public class ARPResponse extends ARPPacket{
 	@Override
 	public ArrayList<Byte> encode() {
 		var res = new ArrayList<Byte>();
+		res.add((byte) Layer2PayloadTypes.ARP.ordinal());
 		res.add(ARPRESPONSE_CODE);
 		res.addAll(requestedIp.encode());
 		res.addAll(responseMAC.encode());
@@ -45,13 +46,5 @@ public class ARPResponse extends ARPPacket{
 	
 	public boolean equals(ARPResponse other) {
 		return requestedIp.equals(other.getRequestedIp()) && responseMAC.equals(other.getResponseMAC());
-	}
-	
-	public static void main(String[] args) throws Exception {
-		var r1 = new ARPResponse(IPv4NetworkAddress.IP_BROADCAST, MAC.MAC_BROADCAST);
-		var enc = r1.encode();
-		var dec = new ARPResponseDecoder();
-		var r2 = dec.decode(enc);
-		assert r1.equals(r2);
 	}
 }

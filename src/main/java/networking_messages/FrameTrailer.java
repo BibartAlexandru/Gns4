@@ -9,6 +9,8 @@ import main.java.helper.ByteSerializable;
  * @encrypted 4 bytes
  */
 public class FrameTrailer implements ByteSerializable<FrameTrailer>{
+	
+	public static final int NR_BYTES = 4; 
 	// always 4 bytes
 	private ArrayList<Byte> FCS;
 
@@ -33,7 +35,7 @@ public class FrameTrailer implements ByteSerializable<FrameTrailer>{
 
 	public FrameTrailer(List<Byte> fCS) throws Exception {
 		super();
-		if(fCS.size() != 4)
+		if(fCS.size() != NR_BYTES)
 			throw new Exception("FCS " + fCS + " has an invalid length of" + fCS.size());
 		FCS = new ArrayList<>(fCS);
 	}

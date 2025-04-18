@@ -9,10 +9,12 @@ import main.java.other.IPv4NetworkAddress;
 
 
 
-public class Packet extends FramePayload {
+public class Packet extends Layer2Payload {
+	public static final int MIN_BYTES = 1 + PacketHeader.NR_BYTES;
 	private PacketHeader header;
-	private PacketPayload payload;
-	public Packet(PacketHeader header, PacketPayload payload) {
+	private Layer3Payload payload;
+	
+	public Packet(PacketHeader header, Layer3Payload payload) {
 		this.header = header;
 		this.payload = payload;
 	}
@@ -22,16 +24,17 @@ public class Packet extends FramePayload {
 	public void setHeader(PacketHeader header) {
 		this.header = header;
 	}
-	public PacketPayload getPayload() {
+	public Layer3Payload getPayload() {
 		return payload;
 	}
-	public void setPayload(PacketPayload payload) {
+	public void setPayload(Layer3Payload payload) {
 		this.payload = payload;
 	}
 	
 	@Override
 	public ArrayList<Byte> encode() {
 		var res = new ArrayList<Byte>();
+		res.add((byte)Layer2PayloadTypes.PACKET.ordinal());
 		res.addAll(header.encode());
 		res.addAll(payload.encode());
 		return res;

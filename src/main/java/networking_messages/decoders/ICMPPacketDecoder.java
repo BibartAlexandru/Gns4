@@ -5,18 +5,19 @@ import java.util.stream.Collectors;
 
 import main.java.networking_messages.ICMPMessageType;
 import main.java.networking_messages.ICMPPacket;
-import main.java.networking_messages.PacketPayload;
+import main.java.networking_messages.Layer3Payload;
 
 
 public class ICMPPacketDecoder extends PacketPayloadDecoder {
 
 	@Override
-	public PacketPayload decode(List<Byte> bytes) throws Exception {
+	public Layer3Payload decode(List<Byte> bytes) throws Exception {
 		if(bytes.size() < ICMPPacket.MIN_SIZE)
 			throw new Exception("ICMP Packet " + bytes + " is under min size" );
-		ICMPMessageType type = ICMPMessageType.values()[(int)bytes.get(0)];
-		int length = (bytes.get(0) << 24) ^ (bytes.get(1) << 16) ^ (bytes.get(2) << 8) ^ bytes.get(3);
-		String content = bytes.subList(5, 5 + length)
+		// 0th byte is Layer2Payload: ICMP
+		ICMPMessageType type = ICMPMessageType.values()[(int)bytes.get(1)];
+		int length = (bytes.get(2) << 24) ^ (bytes.get(3) << 16) ^ (bytes.get(4) << 8) ^ bytes.get(5);
+		String content = bytes.subList(6, 6 + length)
 				.stream()
 				.map(b -> String.valueOf((char)Byte.toUnsignedInt(b)))
 				.collect(Collectors.joining());

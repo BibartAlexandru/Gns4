@@ -9,7 +9,7 @@ import main.java.other.IPv4NetworkAddress;
 
 public class DHCPAckgnowledge extends DHCPPacket{
 	public static final byte DHCPACK_CODE = 3;
-	public static final int NR_BYTES = 9;
+	public static final int NR_BYTES = 1 + 1 + IPv4NetworkAddress.NR_BYTES;
 	private IPv4NetworkAddress ackgnowledgedIp;
 
 	public DHCPAckgnowledge(IPv4NetworkAddress ackgnowlegedIp) {
@@ -25,12 +25,13 @@ public class DHCPAckgnowledge extends DHCPPacket{
 	}
 	
 	public boolean equals(DHCPAckgnowledge other) {
-		return ackgnowledgedIp.equals(other);
+		return ackgnowledgedIp.equals(other.getAckgnowledgedIp());
 	}
 	
 	@Override
 	public ArrayList<Byte> encode() {
 		var res = new ArrayList<Byte>();
+		res.add((byte)Layer3PayloadTypes.DHCP.ordinal());
 		res.add(DHCPACK_CODE);
 		res.addAll(ackgnowledgedIp.encode());
 		return res;

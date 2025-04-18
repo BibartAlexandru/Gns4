@@ -9,7 +9,7 @@ import main.java.other.IPv4NetworkAddress;
 
 public class DHCPRequest extends DHCPPacket {
 	public static final int DHCPREQUEST_CODE = 2;
-	public static final int NR_BYTES = 9;
+	public static final int NR_BYTES = 1 + 1 + IPv4NetworkAddress.NR_BYTES;
 	private IPv4NetworkAddress requestedIp;
 	
 	public DHCPRequest(IPv4NetworkAddress requestedIp) {
@@ -34,6 +34,7 @@ public class DHCPRequest extends DHCPPacket {
 	@Override
 	public ArrayList<Byte> encode() {
 		var res = new ArrayList<Byte>();
+		res.add((byte)Layer3PayloadTypes.DHCP.ordinal());
 		res.add((byte) DHCPREQUEST_CODE);
 		res.addAll(requestedIp.encode());
 		return res;

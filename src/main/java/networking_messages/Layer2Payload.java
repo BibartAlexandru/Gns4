@@ -5,16 +5,15 @@ import java.util.List;
 
 import main.java.helper.ByteSerializable;
 
-public class FramePayload implements ByteSerializable<FramePayload>{
+public abstract class Layer2Payload implements ByteSerializable<Layer2Payload>{
 
-	public FramePayload() {
+	public Layer2Payload() {
 		
 	}
 	
 	@Override
 	public ArrayList<Byte> encode() {
-		ArrayList<Byte> res = new ArrayList<Byte>();
-		return res;
+		return null;
 	}
 	
 	/**
@@ -27,7 +26,7 @@ public class FramePayload implements ByteSerializable<FramePayload>{
 			payload.add((byte)0);
 	}
 	
-	public boolean equals(FramePayload other) {
+	public boolean equals(Layer2Payload other) {
 		return true;
 	}
 

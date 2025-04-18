@@ -8,7 +8,7 @@ public class FrameTrailerDecoder extends ByteArrayDecoder<FrameTrailer> {
 
 	@Override
 	public FrameTrailer decode(List<Byte> bytes) throws Exception {
-		if(bytes.size() != 4)
+		if(bytes.size() != FrameTrailer.NR_BYTES)
 			throw new Exception("frame trailer" + bytes + " has an invalid length of" + bytes.size());
 		return new FrameTrailer(bytes);
 	}

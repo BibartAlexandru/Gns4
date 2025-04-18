@@ -1,17 +1,29 @@
 package main.java.other;
 
-import java.net.InetAddress;
 
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import main.java.agents.DeviceAgent;
 
 public class Interface {
+	
+	public Interface(boolean statusPhysical, boolean statusLogical, String name, MAC mac, IPv4NetworkAddress ipv4,
+			AgentInterface connectedTo, DeviceAgent agent) {
+		super();
+		this.statusPhysical = statusPhysical;
+		this.statusLogical = statusLogical;
+		this.name = name;
+		this.mac = mac;
+		this.ipv4 = ipv4;
+		this.connectedTo = connectedTo;
+		this.agent = agent;
+	}
+
 	private boolean statusPhysical;
 	private boolean statusLogical;
 	private String name;
-	private String mac;
-	private InetAddress ipv4;
+	private MAC mac;
+	private IPv4NetworkAddress ipv4;
 	private AgentInterface connectedTo;
 	private DeviceAgent agent;
 	
@@ -51,25 +63,25 @@ public class Interface {
 
 
 
-	public String getMac() {
+	public MAC getMac() {
 		return mac;
 	}
 
 
 
-	public void setMac(String mac) {
+	public void setMac(MAC mac) {
 		this.mac = mac;
 	}
 
 
 
-	public InetAddress getIpv4() {
+	public IPv4NetworkAddress getIpv4() {
 		return ipv4;
 	}
 
 
 
-	public void setIpv4(InetAddress ipv4) {
+	public void setIpv4(IPv4NetworkAddress ipv4) {
 		this.ipv4 = ipv4;
 	}
 
@@ -94,18 +106,6 @@ public class Interface {
 
 
 	public void setAgent(DeviceAgent agent) {
-		this.agent = agent;
-	}
-	
-	public Interface(boolean statusPhysical, boolean statusLogical, String name, String mac, InetAddress ipv4,
-			AgentInterface connectedTo, DeviceAgent agent) {
-		super();
-		this.statusPhysical = statusPhysical;
-		this.statusLogical = statusLogical;
-		this.name = name;
-		this.mac = mac;
-		this.ipv4 = ipv4;
-		this.connectedTo = connectedTo;
 		this.agent = agent;
 	}
 	

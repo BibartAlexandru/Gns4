@@ -14,6 +14,7 @@ import main.java.other.MAC;
  * 
  * */
 public class FrameHeader implements ByteSerializable<FrameHeader>{
+	public static final int NR_BYTES = 2 * MAC.NR_BYTES;
 	private MAC dstMac;
 	private MAC sourceMac;
 	
