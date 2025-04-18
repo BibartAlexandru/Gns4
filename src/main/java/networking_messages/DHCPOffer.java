@@ -40,7 +40,7 @@ public class DHCPOffer extends DHCPPacket{
 			res.add(b);
 		for(var ip : offeredIps)
 			res.addAll(ip.encode());
-		return super.encode();
+		return res;
 	}
 
 	public DHCPOffer(ArrayList<IPv4NetworkAddress> offeredIps) {
@@ -49,6 +49,11 @@ public class DHCPOffer extends DHCPPacket{
 	}
 
 	public boolean equals(DHCPOffer other) {
-		return offeredIps.equals(other.getOfferedIps());
+		if(offeredIps.size() != other.getOfferedIps().size())
+			return false;
+		for(int i = 0 ; i < offeredIps.size() ; i++)
+			if(!offeredIps.get(i).equals(other.getOfferedIps().get(i)))
+				return false;
+		return true ;
 	}
 }

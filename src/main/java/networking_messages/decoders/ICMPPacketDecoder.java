@@ -8,7 +8,7 @@ import main.java.networking_messages.ICMPPacket;
 import main.java.networking_messages.Layer3Payload;
 
 
-public class ICMPPacketDecoder extends PacketPayloadDecoder {
+public class ICMPPacketDecoder extends Layer3PayloadDecoder {
 
 	@Override
 	public Layer3Payload decode(List<Byte> bytes) throws Exception {

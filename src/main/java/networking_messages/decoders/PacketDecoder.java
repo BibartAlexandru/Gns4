@@ -14,7 +14,7 @@ public class PacketDecoder extends ByteArrayDecoder<Packet>{
 		if(bytes.size() < Packet.MIN_BYTES)
 			throw new Exception("Packet: " + bytes + " has invalid size: " + bytes.size());
 		var hDec = new PacketHeaderDecoder();
-		var plDec = new PacketPayloadDecoder();
+		var plDec = new Layer3PayloadDecoder();
 		// 0th byte is Layer2Payload: PACKET
 		PacketHeader h = hDec.decode(bytes.subList(1, 18));
 		Layer3Payload pl = plDec.decode(bytes.subList(10, bytes.size()));

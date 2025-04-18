@@ -20,7 +20,7 @@ public class ARPResponseDecoder extends ARPPacketDecoder{
 		var ipDec = new IPv4NetworkAddressDecoder();
 		var macDec = new MACDecoder();
 		var reqIp = ipDec.decode(bytes.subList(2, 2 + IPv4NetworkAddress.NR_BYTES));
-		var respMAC = macDec.decode(bytes.subList(2 + IPv4NetworkAddress.NR_BYTES, bytes.size()));
+		var respMAC = macDec.decode(bytes.subList(2 + IPv4NetworkAddress.NR_BYTES, ARPResponse.NR_BYTES));
 		return new ARPResponse(reqIp, respMAC);
 	}
 

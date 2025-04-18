@@ -20,9 +20,11 @@ public class DHCPOfferDecoder extends DHCPPacketDecoder{
 		int offeredIpsLen = (bytes.get(2) >> 24) ^ (bytes.get(3) >> 16) ^ (bytes.get(4) >> 8) ^ (bytes.get(5));
 		var offeredIps = new ArrayList<IPv4NetworkAddress>();
 		var dec = new IPv4NetworkAddressDecoder();
+		
+		int startByte = 6 ;
 		for(int i = 0 ; i < offeredIpsLen ; i += IPv4NetworkAddress.NR_BYTES)
 		{
-			var ip = dec.decode(bytes.subList(i, i + IPv4NetworkAddress.NR_BYTES));
+			var ip = dec.decode(bytes.subList(startByte + i, startByte + i + IPv4NetworkAddress.NR_BYTES));
 			offeredIps.add(ip);
 		}
 		

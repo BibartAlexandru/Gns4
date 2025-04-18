@@ -8,7 +8,7 @@ import main.java.other.MAC;
 
 public class ARPResponse extends ARPPacket{
 	static public final byte ARPRESPONSE_CODE = 1;
-	static public final int NR_BYTES = 1 + IPv4NetworkAddress.NR_BYTES + MAC.NR_BYTES;
+	static public final int NR_BYTES = 1 + 1 + IPv4NetworkAddress.NR_BYTES + MAC.NR_BYTES;
 	
 	private IPv4NetworkAddress requestedIp;
 	private MAC responseMAC;
