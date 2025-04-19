@@ -1,6 +1,7 @@
 package main.java.agents;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.TickerBehaviour;
@@ -10,14 +11,14 @@ import main.java.other.MAC;
 import javafx.application.Platform;
 
 public class PCAgent extends DeviceAgent {
+	private static HashMap<String, PCAgent> agents = new HashMap<String, PCAgent>();
 	
 	private PCAgentStates state ;
-	
-	
 	
 	@Override
 	protected void setup() {
 		super.setup();
+		agents.put(getName(), this);
 		
 		Object[]args = getArguments();
 		String macStr = args[0].toString();	
@@ -47,6 +48,7 @@ public class PCAgent extends DeviceAgent {
 				this
 				));
 		setInterfaces(interfaces);
+		System.out.println("PC interfaces size: " + this.interfaces.size());
 		
 		Behaviour checkConn = new TickerBehaviour(this, 500) {
 			protected void onTick() {
@@ -83,6 +85,12 @@ public class PCAgent extends DeviceAgent {
 		checkConn.setBehaviourName("checkConn");
 		
 		addBehaviour(checkConn);
+	}
+	
+	public static PCAgent getPCByAgentName(String name) {
+		if(agents.containsKey(name))
+			return agents.get(name);
+		return null;
 	}
 	
 	public boolean isInterfaceConnected() {

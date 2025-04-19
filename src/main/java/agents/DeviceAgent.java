@@ -68,6 +68,7 @@ public class DeviceAgent extends Agent {
 	public ArrayList<Interface> getInterfaces() {
 		return interfaces;
 	}
+	
 	public void setInterfaces(ArrayList<Interface> interfaces) {
 		this.interfaces = interfaces;
 	}
