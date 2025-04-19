@@ -13,10 +13,16 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
+import javafx.scene.layout.Border;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.BorderStroke;
+import javafx.scene.layout.BorderStrokeStyle;
+import javafx.scene.layout.BorderWidths;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.Priority;
+import javafx.scene.layout.Region;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -35,6 +41,11 @@ public class MainGUI extends Application{
 	private static String downInterfaceImgSrc; 
 	private static String pcImgSrc;
 	private static String cssFile;
+	
+	private boolean isDraggingPC = false ;
+	private boolean showInterfaces = false ;
+	private Node interfacesModal = null;
+
 	
 	public MainGUI() {
 		super();
@@ -64,53 +75,63 @@ public class MainGUI extends Application{
 		view.setFitWidth(100);
 		view.setFitHeight(100);
 		view.setPreserveRatio(true);
+		view.getStyleClass().add("pc-img-view");
 		
 		view.setOnMousePressed(e -> {
 			x = (float) (e.getSceneX() - view.getLayoutX());
 			y = (float) (e.getSceneY() - view.getLayoutY());
 		});
 		
+		
 		view.setOnMouseDragged(e -> {
 			view.setLayoutX(e.getSceneX() - x);
 			view.setLayoutY(e.getSceneY() - y);
 		});
 		
-		// Show interfaces
-		view.setOnMouseEntered(e -> {
-			Node interfacesModal = createInterfacesModal(manager.getDeviceAgentInterfaces(thisPc));
+		view.setOnMouseClicked(e -> {
+			Node interfacesModal = createInterfacesModal(manager.getDeviceAgentInterfaces(thisPc), thisPc);
 			// If modal already exists don't add it anymore. Was flickering that's why I added this
-			if(p.getChildren().stream().anyMatch(child -> child.getId() != null && child.getId().equals("InterfacesModal")))
+			if(isDraggingPC || 
+					(p.getChildren().stream().anyMatch(child -> child.getId() != null && child.getId().equals("InterfacesModal")))
+					)
 				return;
+			interfacesModal.setLayoutX(e.getSceneX() - x);
+			interfacesModal.setLayoutY(e.getSceneY() - y + 100);
 			p.getChildren().add(interfacesModal);
+			this.interfacesModal = interfacesModal;
 		});
-		
-		// Delete the Node that was the shown Interface modal
-		view.setOnMouseExited(e -> {
-			p.getChildren().removeIf(child -> child.getId() != null && child.getId().equals("InterfacesModal"));
-		});
-		
 		p.getChildren().add(view);
 	};
 	
-	public static Node createInterfacesModal(ArrayList<Interface> interfaces) {
+	public static Node createInterfacesModal(ArrayList<Interface> interfaces, String pcAgent) {
 		VBox col = new VBox();
-		col.setMinWidth(300);
+		col.setMinWidth(100);
 		col.setBackground(new Background(
-			    new BackgroundFill(Color.LIGHTBLUE, CornerRadii.EMPTY, Insets.EMPTY)
+			    new BackgroundFill(Color.WHITE, CornerRadii.EMPTY, Insets.EMPTY)
 				));
-		
 		col.getStyleClass().add("interfaces-modal");
 		col.getChildren().add(new Text("Interfaces"));
+		col.setSpacing(20);
+		col.setPadding(new Insets(10,10,10,10));
+		col.setBorder(new Border(new BorderStroke(
+				Color.BLACK,
+				BorderStrokeStyle.SOLID,
+				CornerRadii.EMPTY,
+				new BorderWidths(1)
+				)));
+		
 		for(var interf : interfaces) {
 			HBox row = new HBox();
 			row.getStyleClass().add("interface-row");
-			row.getChildren().add(new Text(interf.getName()));
-			Image intStatus = new Image(downInterfaceImgSrc);
-			var view = new ImageView(intStatus);
-			view.getStyleClass().add("interface-status-image");
-			view.setFitWidth(10);
-			view.setFitHeight(10);
-			row.getChildren().add(view);
+			row.setMinWidth(150);
+			row.setMinHeight(20);
+			row.setPadding(new Insets(10, 10, 10, 10));
+			
+			var intNameText = new Text(interf.getName());
+			Region space = new Region();
+			row.setHgrow(space, Priority.ALWAYS);
+			var onLight = interf.getGui().getOnLight();
+			row.getChildren().addAll(intNameText, space, onLight);
 			col.getChildren().add(row);
 		}
 		col.setId("InterfacesModal");
@@ -119,10 +140,25 @@ public class MainGUI extends Application{
 		return col;
 	}
 	
+	/**
+	 * Tests style class with contains()
+	 * @param n
+	 * @param styleClass
+	 * @return
+	 */
+	public boolean isDescendantOf(Node n, String styleClass) {
+		if(n.getParent() == null)
+			return false;
+		if(n.getStyleClass().contains(styleClass))
+			return true ;
+		return isDescendantOf(n.getParent(), styleClass);
+	}
+	
 	@Override
 	public void start(Stage primaryStage) throws Exception {
 		Button addPcBtn = new Button("Add PC");
 		Button addRouterBtn = new Button("Add Router");
+		Button connectBtn = new Button("Connect Devices");
 		
 		BorderPane root = new BorderPane();
 		
@@ -134,6 +170,18 @@ public class MainGUI extends Application{
 		root.setCenter(p);
 		
 		Scene scene = new Scene(root, sceneX, sceneY);
+		scene.setOnMouseClicked(e -> {
+		    Node t = (Node) e.getTarget();
+			// deletes interface modal if exists in p
+		    System.out.println(t);
+			if(!isDescendantOf(t, "interfaces-modal")
+					&& !t.getStyleClass().contains("pc-img-view")
+					)
+				p.getChildren().removeIf(child -> child.getId() != null && child.getId().equals("InterfacesModal"));
+		});
+		
+		
+		
 		scene.getStylesheets().add(cssFile);
 		primaryStage.setTitle("GNS4");
 		primaryStage.setScene(scene);

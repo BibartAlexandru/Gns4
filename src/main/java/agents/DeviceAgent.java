@@ -85,6 +85,21 @@ public class DeviceAgent extends Agent {
 		this.arpTable = arpTable;
 	}
 	
+	/**
+	 * 
+	 * @param interf
+	 * @return whether the toggle succeeded
+	 */
+	public boolean toggleInterfacePhysicalStatus(Interface interf) {
+		if(!interfaces.contains(interf)) {
+			System.out.println("Agent " + getLocalName() + " does not have interface " + interf);
+			return false;
+		}
+		
+		interf.togglePhysicalStatus();
+		return true;
+	}
+	
 	public DeviceAgent() {
 		super();
 	}

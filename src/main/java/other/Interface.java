@@ -4,10 +4,11 @@ package main.java.other;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import main.java.agents.DeviceAgent;
+import main.java.gui.InterfaceGUI;
 
 public class Interface {
 	
-	public Interface(boolean statusPhysical, boolean statusLogical, String name, MAC mac, IPv4NetworkAddress ipv4,
+	public Interface(Boolean statusPhysical, Boolean statusLogical, String name, MAC mac, IPv4NetworkAddress ipv4,
 			AgentInterface connectedTo, DeviceAgent agent) {
 		super();
 		this.statusPhysical = statusPhysical;
@@ -17,21 +18,31 @@ public class Interface {
 		this.ipv4 = ipv4;
 		this.connectedTo = connectedTo;
 		this.agent = agent;
+		this.gui = new InterfaceGUI(this.statusPhysical, agent, this);
 	}
 
-	private boolean statusPhysical;
-	private boolean statusLogical;
+	private Boolean statusPhysical;
+	private Boolean statusLogical;
 	private String name;
 	private MAC mac;
 	private IPv4NetworkAddress ipv4;
 	private AgentInterface connectedTo;
 	private DeviceAgent agent;
 	
+	private InterfaceGUI gui;
+	
+	public InterfaceGUI getGui() {
+		return gui;
+	}
+
 	public boolean isStatusPhysical() {
 		return statusPhysical;
 	}
 
-
+	public void togglePhysicalStatus() {
+		setStatusPhysical(!statusPhysical);
+		gui.updateOnLight(statusPhysical);
+	}
 
 	public void setStatusPhysical(boolean statusPhysical) {
 		this.statusPhysical = statusPhysical;

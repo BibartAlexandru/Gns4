@@ -40,7 +40,7 @@ public class PCAgent extends DeviceAgent {
 		var interfaces = new ArrayList<Interface>();
 		interfaces.add(new Interface(
 				intStatus,
-				intStatus,
+				true,
 				"eth0", 
 				interfMAC,
 				IPv4NetworkAddress.ZERO,

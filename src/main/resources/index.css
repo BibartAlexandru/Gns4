@@ -1,14 +1,13 @@
 .interfaces-modal{
 	-fx-background-color: #808080
-	-fx-padding: 15
-	-fx-spacing: 20
-	-fx-min-width: 500;
-	-fx-min-height: 100;
+	-fx-min-width: 100;
+	-fx-min-height: 50;
 }
 
 .interface-row{
-	-fx-min-width: 200;
-	-fx-min-height: 50;
+	-fx-font-size: 20px;
+	-fx-border-color: transparent transparent black transparent; 
+	-fx-border-width: 0 0 1 0;
 }
 
 .interface-status-image{
