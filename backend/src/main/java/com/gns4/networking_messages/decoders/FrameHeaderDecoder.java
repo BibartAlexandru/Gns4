@@ -14,6 +14,7 @@ public class FrameHeaderDecoder extends ByteArrayDecoder<FrameHeader> {
 		var macDec = new MACDecoder();
 		MAC dstMac = macDec.decode(bytes.subList(0, MAC.NR_BYTES));
 		MAC srcMac = macDec.decode(bytes.subList(MAC.NR_BYTES, 2*MAC.NR_BYTES));
-		return new FrameHeader(dstMac, srcMac);
+    int type = bytes.get(12) << 24 | bytes.get(13) << 16 | bytes.get(14) << 8 | bytes.get(15);
+		return new FrameHeader(dstMac, srcMac, type);
 	}
 }

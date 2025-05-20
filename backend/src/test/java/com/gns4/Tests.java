@@ -95,7 +95,7 @@ public class Tests {
 	
 	@Test
 	public void FrameHeaderEncTest() throws Exception {
-		FrameHeader h = new FrameHeader(new MAC("12:12:12:12:12:12"), new MAC("0001.abde.02cf"));
+		FrameHeader h = new FrameHeader(new MAC("12:12:12:12:12:12"), new MAC("0001.abde.02cf"), FrameHeader.TYPE_FIELD_IPv4);
 		FrameHeaderDecoder decoder = new FrameHeaderDecoder();
 		FrameHeader h2 = decoder.decode(h.encode());
 		if(!h.equals(h2))
@@ -128,7 +128,7 @@ public class Tests {
 	public void PacketHeaderEncTest() throws Exception {
 		var ip1 = new IPv4NetworkAddress(new byte[] {0,0,0,0}, new byte[] {0,0,0,0});
 		var ip2 = new IPv4NetworkAddress(new byte[] {0,0,0,0}, new byte[] {0,0,0,0});
-		var p = new PacketHeader(ip1,ip2,5);
+		var p = new PacketHeader(ip1,ip2);
 		var pDec = new PacketHeaderDecoder();
 		var end = p.encode();
 		var p2 = pDec.decode(p.encode());
@@ -137,7 +137,7 @@ public class Tests {
 	
 	@Test
 	public void frameWithARPReqTest() throws Exception {
-			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST);
+			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST, FrameHeader.TYPE_FIELD_IPv4);
 			var tr = new ArrayList<Byte>();
 			for(int i = 0 ; i < 4 ; i++)
 				tr.add((byte)0);
@@ -154,7 +154,7 @@ public class Tests {
 	
 	@Test
 	public void frameWithARPRespTest() throws Exception {
-			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST);
+			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST, FrameHeader.TYPE_FIELD_IPv4);
 			var tr = new ArrayList<Byte>();
 			for(int i = 0 ; i < 4 ; i++)
 				tr.add((byte)0);
@@ -171,14 +171,14 @@ public class Tests {
 	
 	@Test
 	public void packetWithDHCPDiscTest() throws Exception {
-			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST);
+			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST, FrameHeader.TYPE_FIELD_IPv4);
 			var tr = new ArrayList<Byte>();
 			for(int i = 0 ; i < 4 ; i++)
 				tr.add((byte)0);
 			var ft = new FrameTrailer(tr);
 			
 			// packet stuff
-			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST, (byte)3);
+			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST);
 			var l3Pl = new DHCPDiscover();
 			var pl = new Packet(pH, l3Pl);
 			
@@ -193,14 +193,14 @@ public class Tests {
 	
 	@Test
 	public void packetWithDHCPOffTest() throws Exception {
-			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST);
+			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST, FrameHeader.TYPE_FIELD_IPv4);
 			var tr = new ArrayList<Byte>();
 			for(int i = 0 ; i < 4 ; i++)
 				tr.add((byte)0);
 			var ft = new FrameTrailer(tr);
 			
 			// packet stuff
-			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST, (byte)3);
+			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST);
 			var offeredIps = new ArrayList<IPv4NetworkAddress>();
 			offeredIps.add(IPv4NetworkAddress.IP_BROADCAST);
 			var l3Pl = new DHCPOffer(offeredIps);
@@ -217,14 +217,14 @@ public class Tests {
 	
 	@Test
 	public void packetWithDHCPReqTest() throws Exception {
-			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST);
+			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST, FrameHeader.TYPE_FIELD_IPv4);
 			var tr = new ArrayList<Byte>();
 			for(int i = 0 ; i < 4 ; i++)
 				tr.add((byte)0);
 			var ft = new FrameTrailer(tr);
 			
 			// packet stuff
-			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST, (byte)3);
+			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST);
 			var l3Pl = new DHCPRequest(IPv4NetworkAddress.IP_BROADCAST);
 			var pl = new Packet(pH, l3Pl);
 			
@@ -239,14 +239,14 @@ public class Tests {
 	
 	@Test
 	public void packetWithDHCPAckTest() throws Exception {
-			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST);
+			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST, FrameHeader.TYPE_FIELD_IPv4);
 			var tr = new ArrayList<Byte>();
 			for(int i = 0 ; i < 4 ; i++)
 				tr.add((byte)0);
 			var ft = new FrameTrailer(tr);
 			
 			// packet stuff
-			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST, (byte)3);
+			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST);
 			var l3Pl = new DHCPAckgnowledge(IPv4NetworkAddress.IP_BROADCAST);
 			var pl = new Packet(pH, l3Pl);
 			
@@ -261,14 +261,14 @@ public class Tests {
 	
 	@Test
 	public void packetWithICMPEchoTest() throws Exception {
-			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST);
+			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST, FrameHeader.TYPE_FIELD_IPv4);
 			var tr = new ArrayList<Byte>();
 			for(int i = 0 ; i < 4 ; i++)
 				tr.add((byte)0);
 			var ft = new FrameTrailer(tr);
 			
 			// packet stuff
-			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST, (byte)3);
+			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST);
 			var l3Pl = new ICMPPacket(ICMPMessageType.ECHO, "dsadsaasddas");
 			var pl = new Packet(pH, l3Pl);
 			
@@ -283,14 +283,14 @@ public class Tests {
 	
 	@Test
 	public void packetWithICMPReplyTest() throws Exception {
-			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST);
+			var fh = new FrameHeader(MAC.MAC_BROADCAST, MAC.MAC_BROADCAST, FrameHeader.TYPE_FIELD_IPv4);
 			var tr = new ArrayList<Byte>();
 			for(int i = 0 ; i < 4 ; i++)
 				tr.add((byte)0);
 			var ft = new FrameTrailer(tr);
 			
 			// packet stuff
-			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST, (byte)3);
+			var pH = new PacketHeader(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.IP_BROADCAST);
 			var l3Pl = new ICMPPacket(ICMPMessageType.REPLY, "dsadsasdasddasasdasdasdsad");
 			var pl = new Packet(pH, l3Pl);
 			

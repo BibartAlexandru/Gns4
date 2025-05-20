@@ -1,8 +1,7 @@
 package com.gns4.networking_messages;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.List;
-
 import com.gns4.helper.ByteSerializable;
 import com.gns4.networking_messages.decoders.FrameHeaderDecoder;
 import com.gns4.other.MAC;
@@ -10,13 +9,17 @@ import com.gns4.other.MAC;
 
 
 /**
- * @encrypted 28 bytes
+ * @encoded 16 bytes
  * 
  * */
 public class FrameHeader implements ByteSerializable<FrameHeader>{
-	public static final int NR_BYTES = 2 * MAC.NR_BYTES;
+	public static final int NR_BYTES = 2 * MAC.NR_BYTES + 4;
+  public static final int TYPE_FIELD_IPv4 = 0x0800;
+  public static final int TYPE_FIELD_ARP = 0x0806;
 	private MAC dstMac;
 	private MAC sourceMac;
+  // Protocol encapsulated
+  private int type;
 	
 	
 	/**
@@ -24,10 +27,18 @@ public class FrameHeader implements ByteSerializable<FrameHeader>{
 	*/
 	public ArrayList<Byte> encode(){
 		ArrayList<Byte> dstEnc = this.dstMac.encode();
-	    ArrayList<Byte> sourceEnc = this.sourceMac.encode();
-	    
-	    dstEnc.addAll(sourceEnc);
-	    return dstEnc;
+	  ArrayList<Byte> sourceEnc = this.sourceMac.encode();
+    ArrayList<Byte> typeArr = new ArrayList<Byte>();
+    typeArr.add((byte)( type >> 24));
+    typeArr.add((byte)( type >> 16));
+    typeArr.add((byte)( type >> 8));
+    typeArr.add((byte) type );
+    ArrayList<Byte> res = new ArrayList<>();
+   
+    res.addAll(dstEnc); 
+    res.addAll(sourceEnc);
+    res.addAll(typeArr);
+    return res;
 	}
 
 	public MAC getDstMac() {
@@ -46,18 +57,19 @@ public class FrameHeader implements ByteSerializable<FrameHeader>{
 		this.sourceMac = sourceMac;
 	}
 
-	public FrameHeader(MAC dstMac, MAC sourceMac) {
+	public FrameHeader(MAC dstMac, MAC sourceMac, int type) {
 		super();
 		this.dstMac = dstMac;
 		this.sourceMac = sourceMac;
+    this.type = type;
 	}
 	
 	public boolean equals(FrameHeader other) {
-		return this.dstMac.equals(other.getDstMac()) && this.sourceMac.equals(other.getSourceMac());
+		return this.dstMac.equals(other.getDstMac()) && this.sourceMac.equals(other.getSourceMac()) && this.type == other.type;
 	}
 	
 	public static void main(String[] args) throws Exception {
-		FrameHeader h = new FrameHeader(new MAC("12:12:12:12:12:12"), new MAC("0001.abde.02cf"));
+		FrameHeader h = new FrameHeader(new MAC("12:12:12:12:12:12"), new MAC("0001.abde.02cf"), TYPE_FIELD_IPv4);
 		FrameHeaderDecoder decoder = new FrameHeaderDecoder();
 		FrameHeader h2 = decoder.decode(h.encode());
 		if(h.equals(h2))
