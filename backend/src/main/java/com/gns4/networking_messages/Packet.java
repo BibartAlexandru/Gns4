@@ -48,8 +48,8 @@ public class Packet extends Layer2Payload {
 	public static void main(String[] args) throws Exception {
 		var h = new PacketHeader(
 				new IPv4NetworkAddress(new byte[] {1,2,3,4}, new byte[]{0,0,0,0}),
-				new IPv4NetworkAddress(new byte[] {1,2,3,4}, new byte[]{0,0,0,0}),
-				3);
+				new IPv4NetworkAddress(new byte[] {1,2,3,4}, new byte[]{0,0,0,0})
+				);
 		var pl = new DHCPDiscover();
 		var p1 = new Packet(h,pl);
 		var dec = new PacketDecoder();

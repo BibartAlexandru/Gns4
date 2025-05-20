@@ -20,7 +20,8 @@ public class ARPRequestDecoder extends ARPPacketDecoder{
 			throw new Exception("ARPRequest code: " + code + " is invalid.");
 		var ipDec = new IPv4NetworkAddressDecoder();
 		var reqIp = ipDec.decode(bytes.subList(2, 2 + IPv4NetworkAddress.NR_BYTES));
-		return new ARPRequest(reqIp);
+    var srcIp = ipDec.decode(bytes.subList(2 + IPv4NetworkAddress.NR_BYTES, 2 + 2*IPv4NetworkAddress.NR_BYTES));
+		return new ARPRequest(reqIp, srcIp);
 	}
 
 }

@@ -80,7 +80,7 @@ public class Frame implements ByteSerializable<Frame>{
 	public static void main(String[] args) throws Exception {
 		var fDec = new FrameDecoder();
 		FrameHeader h = new FrameHeader(new MAC("0000.0000.0000"), new MAC("1111.1111.1111"));
-		Layer2Payload p = new ARPRequest(IPv4NetworkAddress.IP_BROADCAST);
+		Layer2Payload p = new ARPRequest(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.ZERO);
 		FrameTrailer t = new FrameTrailer(new ArrayList<Byte>(Arrays.asList((byte)0,(byte)0,(byte)0, (byte)0)));
 		Frame f = new Frame(h, p, t);
 		Frame f2 = fDec.decode(f.encode());

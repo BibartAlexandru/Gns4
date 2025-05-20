@@ -39,7 +39,7 @@ public class Tests {
 	
 	@Test
 	public void ARPReqEncTest() throws Exception {
-		var a1 = new ARPRequest(IPv4NetworkAddress.IP_BROADCAST);
+		var a1 = new ARPRequest(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.ZERO);
 		var enc = a1.encode();
 		var dec = new ARPRequestDecoder();
 		var a2 = dec.decode(enc);
@@ -142,7 +142,7 @@ public class Tests {
 			for(int i = 0 ; i < 4 ; i++)
 				tr.add((byte)0);
 			var ft = new FrameTrailer(tr);
-			var pl = new ARPRequest(IPv4NetworkAddress.IP_BROADCAST);
+			var pl = new ARPRequest(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.ZERO);
 			var f = new Frame(fh, pl ,ft);
 			
 			var enc = f.encode();

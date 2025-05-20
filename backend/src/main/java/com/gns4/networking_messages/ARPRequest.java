@@ -10,11 +10,21 @@ import com.gns4.other.IPv4NetworkAddress;
 
 public class ARPRequest extends ARPPacket {
 	static public final byte ARPREQUEST_CODE = 0;
-	static public final int NR_BYTES = 1 + 1 + IPv4NetworkAddress.NR_BYTES;
+	static public final int NR_BYTES = 1 + 1 + 2* IPv4NetworkAddress.NR_BYTES;
 	private IPv4NetworkAddress requestedIp;
+  private IPv4NetworkAddress senderIp;
 	
-	public ARPRequest(IPv4NetworkAddress requestedIp) {
+	public IPv4NetworkAddress getSenderIp() {
+	return senderIp;
+}
+
+public void setSenderIp(IPv4NetworkAddress senderIp) {
+	this.senderIp = senderIp;
+}
+
+	public ARPRequest(IPv4NetworkAddress requestedIp, IPv4NetworkAddress senderIp) {
 		this.requestedIp = requestedIp;
+    this.senderIp = senderIp ;
 	}
 
 	public IPv4NetworkAddress getRequestedIp() {
@@ -31,6 +41,7 @@ public class ARPRequest extends ARPPacket {
 		res.add((byte) Layer2PayloadTypes.ARP.ordinal());
 		res.add(ARPREQUEST_CODE);
 		res.addAll(requestedIp.encode());
+    res.addAll(senderIp.encode());
 		return res;
 	}
 	
@@ -39,7 +50,7 @@ public class ARPRequest extends ARPPacket {
 	}
 	
 	public static void main(String[] args) throws Exception {
-		var a1 = new ARPRequest(IPv4NetworkAddress.IP_BROADCAST);
+		var a1 = new ARPRequest(IPv4NetworkAddress.IP_BROADCAST, IPv4NetworkAddress.ZERO);
 		var enc = a1.encode();
 		var dec = new ARPRequestDecoder();
 		var a2 = dec.decode(enc);

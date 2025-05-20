@@ -63,6 +63,14 @@ public class FrameHeader implements ByteSerializable<FrameHeader>{
 		this.sourceMac = sourceMac;
     this.type = type;
 	}
+
+	public FrameHeader(MAC dstMac, MAC sourceMac) {
+		super();
+		this.dstMac = dstMac;
+		this.sourceMac = sourceMac;
+    this.type = TYPE_FIELD_IPv4;
+	}
+
 	
 	public boolean equals(FrameHeader other) {
 		return this.dstMac.equals(other.getDstMac()) && this.sourceMac.equals(other.getSourceMac()) && this.type == other.type;

@@ -21,7 +21,23 @@ public class Interface {
 	}
 
 	private Boolean statusPhysical;
+	public Boolean getStatusPhysical() {
+		return statusPhysical;
+	}
+
+	public void setStatusPhysical(Boolean statusPhysical) {
+		this.statusPhysical = statusPhysical;
+	}
+
 	private Boolean statusLogical;
+	public Boolean getStatusLogical() {
+		return statusLogical;
+	}
+
+	public void setStatusLogical(Boolean statusLogical) {
+		this.statusLogical = statusLogical;
+	}
+
 	private String name;
 	private MAC mac;
 	private IPv4NetworkAddress ipv4;

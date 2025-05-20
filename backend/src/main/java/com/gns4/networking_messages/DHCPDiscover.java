@@ -3,10 +3,12 @@ package com.gns4.networking_messages;
 import java.util.ArrayList;
 
 public class DHCPDiscover extends DHCPPacket{
-	private static final int DISCOVER_CODE = 0;
-	public static final int NR_BYTES = 2;
+	public static final int NR_BYTES = 1; // CODE FROM DHCPPacket
 	
-	public DHCPDiscover() {}
+	public DHCPDiscover() {
+    super() ;
+    type = DHCPPacketType.DISCOVER ;
+  }
 	
 	/**
 	 * @return DHCPPacketCode(1 byte) = 1
@@ -14,8 +16,8 @@ public class DHCPDiscover extends DHCPPacket{
 	@Override
 	public ArrayList<Byte> encode() {
 		var res = new ArrayList<Byte>();
-		res.add((byte)Layer3PayloadTypes.DHCP.ordinal());
-		res.add((byte)DISCOVER_CODE);
+    // 0 because it's the 0th in the enum
+		res.add((byte)type.ordinal());
 		return res;
 	}
 	
