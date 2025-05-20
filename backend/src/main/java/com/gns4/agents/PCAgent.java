@@ -1,22 +1,25 @@
 package com.gns4.agents;
-
 import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.gns4.helper.CommandLineParser;
 import com.gns4.networking_messages.ARPRequest;
 import com.gns4.networking_messages.DHCPDiscover;
 import com.gns4.other.IPv4NetworkAddress;
 import com.gns4.other.Interface;
 import com.gns4.other.MAC;
 
+import de.vandermeer.asciitable.AsciiTable;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.TickerBehaviour;
+import jade.util.Logger;
 
 
 public class PCAgent extends DeviceAgent {
-	private static HashMap<String, PCAgent> agents = new HashMap<String, PCAgent>();
+  public static final Logger logger = Logger.getMyLogger(PCAgent.class.getName());
+	public static HashMap<String, PCAgent> agents = new HashMap<String, PCAgent>();
 	private PCAgentStates state ;
   private Instant lastDHCPAquireAttempt ;
   private final int DHCPAquireAttemptCooldown = 10 ;// in seconds
@@ -24,6 +27,8 @@ public class PCAgent extends DeviceAgent {
 	@Override
 	protected void setup() {
 		super.setup();
+    CommandLineParser cmdP = new CommandLineParser();
+    cmdP.start();
 		agents.put(getName(), this);
 		
 		Object[]args = getArguments();
@@ -36,7 +41,7 @@ public class PCAgent extends DeviceAgent {
 		}
 		catch(Exception e) {
 			e.printStackTrace();
-			System.out.println("Using mac 0000.0000.0000 for PC: " + getLocalName());
+			logger.info("Using mac 0000.0000.0000 for PC: " + getLocalName());
 			try {
 				interfMAC = new MAC("0000.0000.0000");
 				//never fails here
@@ -54,10 +59,11 @@ public class PCAgent extends DeviceAgent {
 				this
 				));
 		setInterfaces(interfaces);
-		System.out.println("PC interfaces size: " + this.interfaces.size());
+		logger.info("PC interfaces size: " + this.interfaces.size());
 		
 		Behaviour checkConn = new TickerBehaviour(this, 500) {
 			protected void onTick() {
+        logger.info("Checking connection. Status: [" + isInterfaceConnected() + "]");
 				if(isInterfaceConnected()) {
 					switch(state) {
             // We were disconnected, but now connected
@@ -97,22 +103,51 @@ public class PCAgent extends DeviceAgent {
 		
 		addBehaviour(checkConn);
 	}
-	
+
+
+  public void connectToRouter(String name){
+    if(!name.contains("Router1")
+    && !name.contains("Router2")
+    && !name.contains("Router3")
+    && !name.contains("Router4"))
+      logger.warning("Attempting to connect to nonexistent router: " + name) ;
+    // TODO: 
+    
+  }
+
+  public void disconnectInterface(){
+    interfaces.clear();
+  }
+
+  public void ping(byte[] address){
+    // logger.warning("Pinging ");
+  }
+
   public void requestAddressDHCP(){
     if(interfaces.size() == 0){
-      //TODO: Log this
+      logger.info("Attempting to request an IP via DHCP, but device: " + getLocalName() + " has no interfaces." );
     }
     if(interfaces.get(0).getStatusPhysical() == false)
-  {
-      //TODO: Log this
+    {
+      logger.info("Attempting to request an IP via DHCP, but device: " + getLocalName() + " has a damaged interface.");
     }
     if(interfaces.get(0).getStatusLogical() == false)
-{
-      //TODO: Log this
+    {
+        System.out.
+        println("Attempting to request an IP via DHCP, but device: " + getLocalName() 
+          + " has an administratively shutdown interface.");
     }
     var dhcpDiscover = new DHCPDiscover() ;
     sendByteSerializable(dhcpDiscover, interfaces.get(0));
     lastDHCPAquireAttempt = Instant.now() ;
+    
+    // Logging
+    AsciiTable table = new AsciiTable();
+    table.addRule();
+    table.addRow("Message", "Source");
+    table.addRule();
+    table.addRow("DHCPDiscover", getLocalName()) ;
+    logger.info(table.render());
   }
 
 	public static PCAgent getPCByAgentName(String name) {

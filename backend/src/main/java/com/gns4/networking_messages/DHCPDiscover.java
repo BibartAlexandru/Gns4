@@ -1,8 +1,10 @@
 package com.gns4.networking_messages;
 
 import java.util.ArrayList;
+import de.vandermeer.asciitable.AsciiTable;
+import com.gns4.helper.Loggable;
 
-public class DHCPDiscover extends DHCPPacket{
+public class DHCPDiscover extends DHCPPacket implements Loggable{
 	public static final int NR_BYTES = 1; // CODE FROM DHCPPacket
 	
 	public DHCPDiscover() {
@@ -23,5 +25,10 @@ public class DHCPDiscover extends DHCPPacket{
 	
 	public boolean equals(DHCPDiscover other) {
 		return true;
+	}
+
+	@Override
+	public String toLogs() {
+    return "";
 	}
 }
