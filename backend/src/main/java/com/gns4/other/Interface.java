@@ -1,6 +1,8 @@
 package com.gns4.other;
 
 
+import java.util.Collection;
+
 import com.gns4.agents.DeviceAgent;
 
 import jade.core.Agent;
@@ -74,7 +76,16 @@ public class Interface {
 		return name;
 	}
 
-
+  public Object[] prettyPrint(){
+    String connTo = getConnectedTo() == null ? "None" :getConnectedTo().getAgentID() + "/" + getConnectedTo().getInterfaceName() ;
+      return 
+    new String[]{
+      name, 
+      "[" + getStatusPhysical() + "/" + getStatusLogical() + "]",
+      getIpv4().toString(),
+      connTo 
+      };
+  }
 
 	public void setName(String name) {
 		this.name = name;
@@ -115,8 +126,6 @@ public class Interface {
 	public void setConnectedTo(AgentInterface connectedTo) {
 		this.connectedTo = connectedTo;
 	}
-
-
 
 	public DeviceAgent getAgent() {
 		return agent;

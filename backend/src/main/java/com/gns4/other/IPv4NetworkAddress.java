@@ -4,6 +4,8 @@ import com.gns4.helper.ByteSerializable;
 import com.gns4.helper.Helper;
 import com.gns4.networking_messages.decoders.IPv4NetworkAddressDecoder;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class IPv4NetworkAddress implements ByteSerializable<IPv4NetworkAddress> {
   public static final IPv4NetworkAddress ZERO =
@@ -25,6 +27,23 @@ public class IPv4NetworkAddress implements ByteSerializable<IPv4NetworkAddress> 
     this.setSubnetMask(subnetMask);
   }
 
+  public static byte[] ipFromString(String addr) throws Exception{
+   Pattern p = Pattern.compile("^(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})\\.(\\d{1,3})$") ; 
+    Matcher m = p.matcher(addr);
+    if(!m.matches())
+      throw new Exception("Invalid IP address: " + addr + " passed to ipFromString.");
+    String n0 = m.group(1) ;
+    String n1 = m.group(2) ;
+    String n2 = m.group(3) ;
+    String n3 = m.group(4) ;
+    byte[] res = new byte[4] ;
+    res[0] = (byte)Integer.parseInt(n0) ;
+    res[1] = (byte)Integer.parseInt(n1) ;
+    res[2] = (byte)Integer.parseInt(n2) ;
+    res[3] = (byte)Integer.parseInt(n3) ;
+    return res;
+  }
+
   public byte[] getIp() {
     return ip;
   }
@@ -40,6 +59,18 @@ public class IPv4NetworkAddress implements ByteSerializable<IPv4NetworkAddress> 
       e.printStackTrace();
       return 0;
     }
+  }
+
+  @Override
+  public String toString(){
+   return String.valueOf((int)(ip[0] & 0xff)) + "." + 
+          String.valueOf((int)(ip[1] & 0xff)) + "." +
+          String.valueOf((int)(ip[2] & 0xff)) + "." +
+          String.valueOf((int)(ip[3] & 0xff)) + "/" + 
+          String.valueOf((int)(subnetMask[0] & 0xff)) + "." +
+          String.valueOf((int)(subnetMask[1] & 0xff)) + "." +
+          String.valueOf((int)(subnetMask[2] & 0xff)) + "." +
+          String.valueOf((int)(subnetMask[3] & 0xff)); 
   }
 
   public void setIp(byte[] ip) {

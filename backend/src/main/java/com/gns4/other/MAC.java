@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.regex.*;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
+import java.util.concurrent.ThreadLocalRandom;
 
 import com.gns4.helper.ByteSerializable;
 
@@ -88,7 +89,19 @@ public class MAC implements ByteSerializable<MAC> {
 				return false;
 		return true;
 	}
-	
+
+  public static MAC getRandom(){
+    byte[] address = new byte[]{
+      (byte)ThreadLocalRandom.current().nextInt(0, 256),
+      (byte)ThreadLocalRandom.current().nextInt(0, 256),
+      (byte)ThreadLocalRandom.current().nextInt(0, 256),
+      (byte)ThreadLocalRandom.current().nextInt(0, 256),
+      (byte)ThreadLocalRandom.current().nextInt(0, 256),
+      (byte)ThreadLocalRandom.current().nextInt(0, 256)
+    };
+    return new MAC(address);
+  }  
+
 	public static void main(String[] args) throws Exception {
 		MAC m1 = new MAC("0412.0Ab0.0d30");
 		MAC m3 = new MAC("12:a3:63:ab:82:aa");

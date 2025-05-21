@@ -4,8 +4,11 @@ import com.gns4.helper.ByteSerializable;
 import com.gns4.helper.Helper;
 import com.gns4.networking_messages.decoders.FrameDecoder;
 import com.gns4.other.ARPTable;
+import com.gns4.other.AgentInterface;
 import com.gns4.other.Interface;
 import com.gns4.other.RoutingTable;
+
+import jade.core.AID;
 import jade.core.Agent;
 import jade.lang.acl.ACLMessage;
 import java.util.ArrayList;
@@ -71,6 +74,16 @@ public class DeviceAgent extends Agent {
     interf.setStatusLogical(false);
   }
 
+  /*
+   * Assumes myInterf exists
+   **/
+  protected void connectTo(String myInterf, AgentInterface to)
+  {
+    Interface mine = interfaces.stream().filter(interface_ -> interface_.getName() == myInterf).findFirst().get();
+    mine.setConnectedTo(to);
+    
+  }
+
   /**
    * @param f
    * @param to
@@ -83,6 +96,21 @@ public class DeviceAgent extends Agent {
     msg.addReceiver(to.getAgent().getAID());
     send(msg);
   }
+
+  public boolean hasInterface(String interf){
+    return interfaces.stream()
+      .filter(interf_ -> interf_.getName() == interf )
+      .findAny()
+      .isPresent();
+  }
+
+  public boolean hasEmptyInterface(String interf){
+    return interfaces.stream()
+      .filter(interf_ -> interf_.getName() == interf && interf_.getConnectedTo() == null )
+      .findAny()
+      .isPresent();
+  }
+
 
   private void handleMessage(byte[] msg) {
     var frameDec = new FrameDecoder();

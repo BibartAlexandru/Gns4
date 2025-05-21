@@ -7,11 +7,13 @@ import java.util.HashMap;
 import com.gns4.helper.CommandLineParser;
 import com.gns4.networking_messages.ARPRequest;
 import com.gns4.networking_messages.DHCPDiscover;
+import com.gns4.other.AgentInterface;
 import com.gns4.other.IPv4NetworkAddress;
 import com.gns4.other.Interface;
 import com.gns4.other.MAC;
 
 import de.vandermeer.asciitable.AsciiTable;
+import jade.core.AID;
 import jade.core.behaviours.Behaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.util.Logger;
@@ -54,7 +56,7 @@ public class PCAgent extends DeviceAgent {
 				true,
 				"eth0", 
 				interfMAC,
-      null,
+        IPv4NetworkAddress.ZERO,
 				null,
 				this
 				));
@@ -68,6 +70,9 @@ public class PCAgent extends DeviceAgent {
 					switch(state) {
             // We were disconnected, but now connected
 						case INTERFACE_DISCONNECTED:{
+              AID other = interfaces.get(0).getConnectedTo().getAgentID() ;
+              String otherIname = interfaces.get(0).getConnectedTo().getInterfaceName() ;
+              logger.info("Device: " + getLocalName() + " has been connected to: " + other + "/" + otherIname ) ;
               if(interfaces.get(0).getIpv4() == null)
 							  state = PCAgentStates.REQUESTING_DHCP_IP;
               else 
@@ -104,15 +109,35 @@ public class PCAgent extends DeviceAgent {
 		addBehaviour(checkConn);
 	}
 
-
-  public void connectToRouter(String name){
-    if(!name.contains("Router1")
-    && !name.contains("Router2")
-    && !name.contains("Router3")
-    && !name.contains("Router4"))
-      logger.warning("Attempting to connect to nonexistent router: " + name) ;
-    // TODO: 
-    
+  public void connectToRouter(String router, String interf){
+    logger.warning("PC attempting to connect an interface to a rounter");
+    if(!router.contains("R1")
+    && !router.contains("R2")
+    && !router.contains("R3")
+    && !router.contains("R4")){
+      logger.warning("Attempting to connect to nonexistent router: " + router) ;
+      return ;
+    }
+    RouterAgent selected = CommandLineParser.findRouter(router) ;
+    if(selected == null)
+    {
+      logger.warning("Could not find agent: " + router+ " when attempting to connect PC to it.") ;
+      return ;
+    }
+    if(!selected.hasEmptyInterface(interf))
+    {
+      logger.warning("Router: " + router+ 
+        " does not have an empty interface with the name: " 
+        + interf + " to which the PC is trying to connect to.") ;
+      return ;
+    }
+    AgentInterface toInterface = new AgentInterface(
+      interf,
+      selected.getAID() 
+    ) ;
+    AgentInterface pcInterface = new AgentInterface("eth0", getAID());
+    interfaces.get(0).setConnectedTo(toInterface);
+    selected.connectTo(interf,pcInterface);
   }
 
   public void disconnectInterface(){
