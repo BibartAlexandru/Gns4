@@ -6,6 +6,10 @@ public class RoutingTable {
 
   ArrayList<Route> routes;
 
+  public RoutingTable(){
+    this.routes = new ArrayList<>() ;
+  }
+
   /**
    * @return The Route to the next hop or null if no matching route exists
    */

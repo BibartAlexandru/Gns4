@@ -14,6 +14,7 @@ public class FrameTrailer implements ByteSerializable<FrameTrailer>{
 	public static final int NR_BYTES = 4; 
 	// always 4 bytes
 	private ArrayList<Byte> FCS;
+  public static final ArrayList<Byte> FCS_0 = new ArrayList<>(List.of((byte)0,(byte)0,(byte)0,(byte)0));
 
 	public ArrayList<Byte> getFCS()  {
 		return FCS;

@@ -1,12 +1,10 @@
 package com.gns4.networking_messages;
 
 import java.util.ArrayList;
-
 import com.gns4.helper.ByteSerializable;
+import com.gns4.helper.PrettyPrintable;
 
-
-
-public abstract class Layer2Payload implements ByteSerializable<Layer2Payload>{
+public abstract class Layer2Payload implements ByteSerializable<Layer2Payload>, PrettyPrintable{
 
 	public Layer2Payload() {
 		

@@ -21,6 +21,11 @@ public class IPv4NetworkAddress implements ByteSerializable<IPv4NetworkAddress> 
   private byte[] ip;
   private byte[] subnetMask;
 
+  public static byte[] intToSubnetByteArray(int subnetMask){
+    int mask = Integer.MAX_VALUE << (32 - subnetMask) ;
+    return Helper.intToByteArray(mask) ;
+  }
+
   public IPv4NetworkAddress(byte[] ip, byte[] subnetMask) {
     super();
     this.setIp(ip);

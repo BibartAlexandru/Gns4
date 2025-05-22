@@ -7,6 +7,7 @@ import java.util.HashMap;
 import com.gns4.helper.CommandLineParser;
 import com.gns4.networking_messages.ARPRequest;
 import com.gns4.networking_messages.DHCPDiscover;
+import com.gns4.networking_messages.Frame;
 import com.gns4.other.AgentInterface;
 import com.gns4.other.IPv4NetworkAddress;
 import com.gns4.other.Interface;
@@ -36,7 +37,6 @@ public class PCAgent extends DeviceAgent {
 		Object[]args = getArguments();
 		String macStr = args[0].toString();	
 
-		boolean intStatus = true ;
 		MAC interfMAC = null;
 		try {
 			interfMAC = new MAC(macStr);
@@ -52,7 +52,7 @@ public class PCAgent extends DeviceAgent {
 		state = PCAgentStates.INTERFACE_DISCONNECTED;
 		var interfaces = new ArrayList<Interface>();
 		interfaces.add(new Interface(
-				intStatus,
+        true,
 				true,
 				"eth0", 
 				interfMAC,
@@ -65,25 +65,31 @@ public class PCAgent extends DeviceAgent {
 		
 		Behaviour checkConn = new TickerBehaviour(this, 500) {
 			protected void onTick() {
-        logger.info("Checking connection. Status: [" + isInterfaceConnected() + "]");
-				if(isInterfaceConnected()) {
+         logger.info("Checking connection. Status: [" + isInterfaceConnected() + "]");
+        logger.info("PC state is: " + state);
+				if(isInterfaceConnected() == true) {
 					switch(state) {
             // We were disconnected, but now connected
 						case INTERFACE_DISCONNECTED:{
               AID other = interfaces.get(0).getConnectedTo().getAgentID() ;
               String otherIname = interfaces.get(0).getConnectedTo().getInterfaceName() ;
               logger.info("Device: " + getLocalName() + " has been connected to: " + other + "/" + otherIname ) ;
-              if(interfaces.get(0).getIpv4() == null)
+              if(interfaces.get(0).getIpv4().equals(IPv4NetworkAddress.ZERO))
 							  state = PCAgentStates.REQUESTING_DHCP_IP;
               else 
                 state = PCAgentStates.RECEIVED_IP;
+              break ;
 						}
 						case RECEIVED_IP:{
 							//
+              break ;
 						}
 						case REQUESTING_DHCP_IP:{
-              if(Duration.between(lastDHCPAquireAttempt, Instant.now()).getSeconds() >= DHCPAquireAttemptCooldown)
+              if(
+              lastDHCPAquireAttempt == null || 
+              Duration.between(lastDHCPAquireAttempt, Instant.now()).getSeconds() >= DHCPAquireAttemptCooldown)
                 requestAddressDHCP() ;
+              break ;
 						}
 					}
 				}
@@ -91,14 +97,17 @@ public class PCAgent extends DeviceAgent {
 					switch(state) {
 						case INTERFACE_DISCONNECTED:{
 							//
+              break;
 						}
 						case RECEIVED_IP:{
 							onInterfaceDisconnect(interfaces.get(0));
 							state = PCAgentStates.INTERFACE_DISCONNECTED;
+              break ;
 						}
 						case REQUESTING_DHCP_IP:{
 							onInterfaceDisconnect(interfaces.get(0));
 							state = PCAgentStates.INTERFACE_DISCONNECTED;
+              break ;
 						}
 					}
 				}
@@ -126,6 +135,7 @@ public class PCAgent extends DeviceAgent {
     }
     if(!selected.hasEmptyInterface(interf))
     {
+      // printInterface(interf);
       logger.warning("Router: " + router+ 
         " does not have an empty interface with the name: " 
         + interf + " to which the PC is trying to connect to.") ;
@@ -144,9 +154,7 @@ public class PCAgent extends DeviceAgent {
     interfaces.clear();
   }
 
-  public void ping(byte[] address){
-    // logger.warning("Pinging ");
-  }
+
 
   public void requestAddressDHCP(){
     if(interfaces.size() == 0){
@@ -162,8 +170,8 @@ public class PCAgent extends DeviceAgent {
         println("Attempting to request an IP via DHCP, but device: " + getLocalName() 
           + " has an administratively shutdown interface.");
     }
-    var dhcpDiscover = new DHCPDiscover() ;
-    sendByteSerializable(dhcpDiscover, interfaces.get(0));
+    Frame f = buildDHCPDiscoverFrame(interfaces.get(0));
+    sendByteSerializable(f, interfaces.get(0));
     lastDHCPAquireAttempt = Instant.now() ;
     
     // Logging
@@ -172,7 +180,9 @@ public class PCAgent extends DeviceAgent {
     table.addRow("Message", "Source");
     table.addRule();
     table.addRow("DHCPDiscover", getLocalName()) ;
-    logger.info(table.render());
+    table.addRule();
+    System.out.println("PC sent a frame:");
+    System.out.println(table.render());
   }
 
 	public static PCAgent getPCByAgentName(String name) {

@@ -4,9 +4,12 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 import com.gns4.helper.ByteSerializable;
+import com.gns4.helper.PrettyPrintable;
 import com.gns4.networking_messages.decoders.FrameDecoder;
 import com.gns4.other.IPv4NetworkAddress;
 import com.gns4.other.MAC;
+
+import de.vandermeer.asciitable.AsciiTable;
 
 
 
@@ -17,7 +20,7 @@ import com.gns4.other.MAC;
  * @param payload
  * @param trailer
  */
-public class Frame implements ByteSerializable<Frame>{
+public class Frame implements ByteSerializable<Frame>, PrettyPrintable{
 	public static final int MIN_SIZE = 64;
 	
 	
@@ -77,6 +80,16 @@ public class Frame implements ByteSerializable<Frame>{
 		return header.equals(other.getHeader()) && payload.equals(other.getPayload()) && trailer.equals(other.getTrailer());
 	}
 	
+  public String prettyPrint(){
+    AsciiTable table= new AsciiTable() ;
+    table.addRule();
+    table.addRow("Dst MAC", "Src MAC", "Type") ;
+    table.addRule();
+    table.addRow(header.getDstMac(), header.getSourceMac(), header.getType());
+    String l3Table = payload.prettyPrint() ;
+    return table.render() + "\n" + l3Table ;
+  }
+
 	public static void main(String[] args) throws Exception {
 		var fDec = new FrameDecoder();
 		FrameHeader h = new FrameHeader(new MAC("0000.0000.0000"), new MAC("1111.1111.1111"));

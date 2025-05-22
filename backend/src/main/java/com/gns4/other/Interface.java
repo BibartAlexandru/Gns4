@@ -46,31 +46,9 @@ public class Interface {
 	private AgentInterface connectedTo;
 	private DeviceAgent agent;
 
-	public boolean isStatusPhysical() {
-		return statusPhysical;
-	}
-
 	public void togglePhysicalStatus() {
 		setStatusPhysical(!statusPhysical);
 	}
-
-	public void setStatusPhysical(boolean statusPhysical) {
-		this.statusPhysical = statusPhysical;
-	}
-
-
-
-	public boolean isStatusLogical() {
-		return statusLogical;
-	}
-
-
-
-	public void setStatusLogical(boolean statusLogical) {
-		this.statusLogical = statusLogical;
-	}
-
-
 
 	public String getName() {
 		return name;

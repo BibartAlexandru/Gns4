@@ -2,12 +2,13 @@ package com.gns4.networking_messages;
 
 import java.util.ArrayList;
 
+import com.gns4.helper.PrettyPrintable;
 import com.gns4.other.IPv4NetworkAddress;
 import com.gns4.other.MAC;
 
 
 
-public class ARPResponse extends ARPPacket{
+public class ARPResponse extends ARPPacket implements PrettyPrintable{
 	static public final byte ARPRESPONSE_CODE = 1;
 	static public final int NR_BYTES = 1 + 1 + IPv4NetworkAddress.NR_BYTES + MAC.NR_BYTES;
 	
@@ -47,5 +48,10 @@ public class ARPResponse extends ARPPacket{
 	
 	public boolean equals(ARPResponse other) {
 		return requestedIp.equals(other.getRequestedIp()) && responseMAC.equals(other.getResponseMAC());
+	}
+	@Override
+	public String prettyPrint() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
 	}
 }

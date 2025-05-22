@@ -3,12 +3,13 @@ package com.gns4.networking_messages;
 import java.net.InetAddress;
 import java.util.ArrayList;
 
+import com.gns4.helper.PrettyPrintable;
 import com.gns4.networking_messages.decoders.ARPRequestDecoder;
 import com.gns4.other.IPv4NetworkAddress;
 
 
 
-public class ARPRequest extends ARPPacket {
+public class ARPRequest extends ARPPacket implements PrettyPrintable{
 	static public final byte ARPREQUEST_CODE = 0;
 	static public final int NR_BYTES = 1 + 1 + 2* IPv4NetworkAddress.NR_BYTES;
 	private IPv4NetworkAddress requestedIp;
@@ -55,5 +56,11 @@ public void setSenderIp(IPv4NetworkAddress senderIp) {
 		var dec = new ARPRequestDecoder();
 		var a2 = dec.decode(enc);
 		assert a1.equals(a2);
+	}
+
+	@Override
+	public String prettyPrint() {
+		// TODO Auto-generated method stub
+		throw new UnsupportedOperationException("Unimplemented method 'prettyPrint'");
 	}
 }

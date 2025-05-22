@@ -4,11 +4,14 @@ import java.util.Scanner;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.antlr.runtime.debug.Profiler.DecisionEvent;
+
 import com.gns4.agents.DeviceAgent;
 import com.gns4.agents.PCAgent;
 import com.gns4.agents.RouterAgent;
 import com.gns4.other.IPv4NetworkAddress;
 import com.gns4.other.Interface;
+import com.gns4.other.MAC;
 
 import de.vandermeer.asciitable.AsciiTable;
 import jade.util.Logger;
@@ -50,7 +53,15 @@ public class CommandLineParser extends Thread{
       return findPc();
     return findRouter(name);
   }
-    
+   
+  public static void addARPEntryForAllDevices(MAC mac, IPv4NetworkAddress ip){
+    PCAgent pc = findPc() ;
+    for(var entry : RouterAgent.agents.entrySet()){
+      RouterAgent r = entry.getValue(); 
+      r.getArpTable().add(ip, mac);
+    }
+    pc.getArpTable().add(ip, mac);
+  }
     
   /**
    * Checks the command & pings if it is a ping
@@ -65,35 +76,13 @@ public class CommandLineParser extends Thread{
       }
       String from = m.group(1) ;
       String ip = m.group(2) ;
-      switch (from) {
-        case "PC":
-          PCAgent pc = findPc() ; 
-          if(pc != null)
-          {
-            try{
-              byte[] ipAdd = IPv4NetworkAddress.ipFromString(ip);  
-              pc.ping(ipAdd);
-            }
-            catch (Exception e){
-              e.printStackTrace();
-              break ;
-            }
-          }
-
-          else 
-            logger.warning("Attempting to ping from PC1, but it is null");
-          break;
-        case "R1":
-          break ;
-        case "R2":
-          break ;
-        case "R3":
-          break ;
-        case "R4":
-          break ;
-
-        default:
-          break;
+      DeviceAgent device = findDevice(from) ;
+      try{
+        byte[] ipAdd = IPv4NetworkAddress.ipFromString(ip);  
+        device.ping(ipAdd) ;
+      }
+      catch (Exception e){
+        e.printStackTrace();
       }
   }
 
@@ -134,6 +123,37 @@ public class CommandLineParser extends Thread{
     }
   }
 
+  /*
+    @syntax ip address add <ip>/<subnet> <Device> <interface>
+  */
+  public void checkAddAddress(String command){
+    Pattern p = Pattern
+    .compile("ip\\s+address\\s+add\\s+(\\d{1,3}\\.\\d{1,3}\\.\\d{1,3}\\.\\d{1,3})\\/(\\d{1,2})\\s+(\\w+)\\s+(\\w+(?:\\/\\w+)?)") ;
+    Matcher m = p.matcher(command) ;
+    if(!m.matches())
+      return ;
+    String ipString = m.group(1) ;
+    String subnetMaskString = m.group(2) ;
+    String deviceName = m.group(3) ;
+    String interfaceName = m.group(4) ;
+    System.out.println("Device is: " + deviceName);
+    DeviceAgent device = CommandLineParser.findDevice(deviceName) ;
+    if(device == null){
+      logger.warning("Device: " + deviceName + " does not exist!");
+      return ;
+    }
+    try{
+      byte[] ipAdd = IPv4NetworkAddress.ipFromString(ipString) ;
+      int subnetMask = Integer.parseInt(subnetMaskString);
+      IPv4NetworkAddress ip = new IPv4NetworkAddress(ipAdd, IPv4NetworkAddress.intToSubnetByteArray(subnetMask));
+      device.addIp(interfaceName, ip);
+      addARPEntryForAllDevices(device.getInterfaceByName(interfaceName).getMac(), ip);
+    }
+    catch(Exception e){
+      e.printStackTrace();
+    }
+  }
+
   /**
    * @syntax show interfaces <device> <interface>
    * Or show interfaces <device>
@@ -145,22 +165,17 @@ public class CommandLineParser extends Thread{
       return;
     String deviceName = m.group(1);
     DeviceAgent dev = findDevice(deviceName) ;
-    AsciiTable output = new AsciiTable() ;
-    output.addRule();
-    output.addRow("Interface Name", "Status", "Address", "Connected To");
-    output.addRule();
+    if(dev == null){
+      logger.warning("Device: " + deviceName + " does not exist!");
+      return ;
+    }
     if(m.group(3) == null){
-      System.out.println(m.group(3));
-      for(Interface i: dev.getInterfaces()) 
-          output.addRow(i.prettyPrint());
+      dev.printInterfaces();
     }
     else{
       String interf = m.group(3);
-      Interface i = dev.getInterfaces().stream().filter(interface_ -> interface_.getName().equals(interf)).findFirst().get();
-      output.addRow(i.prettyPrint());
+      dev.printInterface(interf);
     }
-    output.addRule();
-    System.out.println(output.render()); 
   }
 
   public void run(){
@@ -188,6 +203,7 @@ public class CommandLineParser extends Thread{
       checkPing(command);
       checkConnectPc(command);
       checkShowInterfaces(command);
+      checkAddAddress(command) ;
     }
   }
   

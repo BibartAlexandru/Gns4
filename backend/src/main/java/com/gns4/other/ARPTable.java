@@ -6,6 +6,10 @@ import java.util.HashMap;
 public class ARPTable {
   private HashMap<IPv4NetworkAddress, MAC> table;
 
+  public ARPTable(){
+    this.table = new HashMap<>() ;
+  }
+
   public boolean existsEntry(IPv4NetworkAddress address) {
     return table.containsKey(address);
   }

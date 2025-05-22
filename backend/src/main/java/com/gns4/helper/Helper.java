@@ -44,4 +44,13 @@ public class Helper {
     res.add((byte) n);
     return res;
   }
+
+  public static byte[] intToByteArray(int n){
+    var res = new byte[4];
+    res[0] = (byte) (n >> 24);
+    res[1] = (byte) (n >> 16);
+    res[2] = (byte) (n >> 8);
+    res[3] = (byte) n;
+    return res;
+  }
 }

@@ -1,16 +1,15 @@
 package com.gns4.networking_messages;
 
 import java.util.ArrayList;
-import java.util.List;
-
+import com.gns4.helper.PrettyPrintable;
 import com.gns4.networking_messages.decoders.PacketDecoder;
 import com.gns4.other.IPv4NetworkAddress;
 
-import jade.imtp.leap.JICP.JICPPacket;
+import de.vandermeer.asciitable.AsciiTable;
 
 
 
-public class Packet extends Layer2Payload {
+public class Packet extends Layer2Payload implements PrettyPrintable {
 	public static final int MIN_BYTES = 1 + PacketHeader.NR_BYTES;
 	private PacketHeader header;
 	private Layer3Payload payload;
@@ -56,6 +55,19 @@ public class Packet extends Layer2Payload {
 		var p2 = dec.decode(p1.encode());
 		if(!p1.equals(p2))
 			throw new Exception("FAILED");
+	}
+	@Override
+	public String prettyPrint() {
+    AsciiTable table = new AsciiTable() ;
+    table.addRule();
+    table.addRow("Version", "IHL",
+      "Total length", "ID", "Flags", "Fragment Offset", "TTL", "Protocol", "Header Checksum", "Src IP", "Dst IP") ;
+    table.addRule();
+    table.addRow(header.getVersion(), header.getIdentification(), 
+      header.getFlags(), header.getTotalLength(), header.getFragmentOffset(), 
+      header.getTtl(), header.getProtocol(), header.getHeaderChechsum(), 
+      header.getSourceIp(), header.getDestIp());
+    return table.render() ;
 	}
 	
 }

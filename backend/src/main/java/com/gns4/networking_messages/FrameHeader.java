@@ -22,6 +22,14 @@ public class FrameHeader implements ByteSerializable<FrameHeader>{
   private int type;
 	
 	
+	public int getType() {
+	return type;
+}
+
+public void setType(int type) {
+	this.type = type;
+}
+
 	/**
 	 * Returns the concatenated encodings of DSTMAC SRCMAC
 	*/
